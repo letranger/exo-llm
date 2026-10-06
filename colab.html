@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Google Colab · EXO-LLM</title>
+<title>Colab 與 Jupyter · EXO-LLM</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
@@ -15,51 +15,60 @@
   <a class="l" href="index.html">認識叢集</a>
   <a class="l" href="start.html">快速開始</a>
   <a class="l" href="pycharm.html">PyCharm</a>
-  <a class="l" href="colab.html">Colab</a>
+  <a class="l" href="colab.html">Colab 與 Jupyter</a>
   <a class="l" href="vibe.html">Vibe Coding 與專題</a>
   <a class="l" href="faq.html">規則與 FAQ</a>
 </div></nav>
 
 <main class="wrap">
-  <div class="eyebrow">Google Colab</div>
-  <h1>在 Colab 裡使用校內 LLM</h1>
-  <p class="lead">Colab 的程式不是在你的電腦上執行，而是在 Google 的雲端主機上。雲端主機連不到校內網路的 <code>192.168.16.131</code>，所以 Colab 要改用另一個網址。</p>
+  <div class="eyebrow">Colab &amp; Jupyter</div>
+  <h1>Colab 連不到叢集，<br>想用筆記本請用 Jupyter</h1>
+  <p class="lead">Google Colab 的程式不是在你的電腦上執行，而是在 Google 的雲端機房裡。叢集放在學校的內部網路，雲端機房連不進來，所以 <b>Colab 無法使用這台 LLM</b>。</p>
 
-  <div class="warn" id="pending"><b>Colab 專用網址開通中。</b> 老師正在設定校外連線用的網址，開通後會更新這一頁。在那之前，請先用 <a href="pycharm.html">PyCharm</a> 或電腦上的 Python 練習。</div>
+  <div class="diagram" role="img" aria-label="示意圖：校內電腦可以連到叢集，Google Colab 在校外連不到">
+    <svg viewBox="0 0 760 250" xmlns="http://www.w3.org/2000/svg" font-family="Noto Sans TC, PingFang TC, sans-serif">
+      <rect x="250" y="20" width="490" height="210" rx="16" fill="none" stroke="#3a3a40" stroke-dasharray="6 6"/>
+      <text x="726" y="44" text-anchor="end" fill="#9a9aa2" font-size="14">學校內部網路</text>
+      <rect x="280" y="70" width="190" height="80" rx="12" fill="#1c1c1f" stroke="#2a2a2e"/>
+      <text x="375" y="105" text-anchor="middle" fill="#ededed" font-size="16" font-weight="700">你的電腦</text>
+      <text x="375" y="130" text-anchor="middle" fill="#9a9aa2" font-size="13">PyCharm · Jupyter</text>
+      <line x1="474" y1="110" x2="556" y2="110" stroke="#5ad17a" stroke-width="2.5"/>
+      <text x="515" y="98" text-anchor="middle" fill="#5ad17a" font-size="18">✓</text>
+      <rect x="560" y="70" width="160" height="80" rx="12" fill="#1c1c1f" stroke="#ffc300"/>
+      <text x="640" y="105" text-anchor="middle" fill="#ffc300" font-size="16" font-weight="700">EXO 叢集</text>
+      <text x="640" y="130" text-anchor="middle" fill="#9a9aa2" font-size="13">192.168.16.131</text>
+      <rect x="20" y="150" width="190" height="80" rx="12" fill="#1c1c1f" stroke="#2a2a2e"/>
+      <text x="115" y="185" text-anchor="middle" fill="#ededed" font-size="16" font-weight="700">Google Colab</text>
+      <text x="115" y="210" text-anchor="middle" fill="#9a9aa2" font-size="13">Google 雲端機房</text>
+      <line x1="214" y1="190" x2="300" y2="190" stroke="#ff7a59" stroke-width="2.5" stroke-dasharray="5 5"/>
+      <text x="257" y="180" text-anchor="middle" fill="#ff7a59" font-size="18">✕</text>
+    </svg>
+  </div>
 
-  <h2>為什麼網址不一樣？</h2>
-  <div class="tbl"><table>
-    <tr><th>你在哪裡寫程式</th><th>程式在哪裡執行</th><th>要用的網址</th></tr>
-    <tr><td>PyCharm、Thonny、終端機</td><td>你的電腦（校內網路）</td><td><code>http://192.168.16.131:8080/v1</code></td></tr>
-    <tr><td>Google Colab</td><td>Google 的雲端主機</td><td>Colab 專用網址（開通中）</td></tr>
-  </table></div>
-
-  <h2>步驟 1：把 key 存進 Colab Secrets</h2>
-  <p>Colab 有一個專門放密碼的地方，key 存在那裡，分享筆記本時別人看不到：</p>
+  <h2>想用「筆記本」的方式寫？裝 JupyterLab</h2>
+  <p>喜歡 Colab 那種一格一格執行的寫法，可以在自己的電腦上安裝 <b>JupyterLab</b>。它和 Colab 幾乎一樣，但程式在你的電腦上執行，只要連著校內網路就能使用叢集。</p>
   <ol class="steps">
-    <li><b>打開 Secrets</b>點 Colab 左側工具列的 🔑 鑰匙圖示。</li>
-    <li><b>新增 secret</b>按「Add new secret」，Name 填 <code>EXO_API_KEY</code>，Value 貼上老師給你的 key。</li>
-    <li><b>開啟存取</b>把「Notebook access」開關打開。</li>
+    <li><b>安裝</b>在終端機輸入 <code>pip install jupyterlab openai</code></li>
+    <li><b>啟動</b>輸入 <code>jupyter lab</code>，瀏覽器會自動打開。點「Python 3」建立新的筆記本。</li>
+    <li><b>連線</b>在第一格貼上下面的程式並執行。用 <code>getpass</code> 輸入 key，key 就不會被存進筆記本檔案裡。</li>
   </ol>
-
-  <h2>步驟 2：安裝套件並連線</h2>
-  <pre><code>!pip install -q openai</code></pre>
-  <pre><code><span class="k">from</span> google.colab <span class="k">import</span> userdata
+  <pre><code><span class="k">from</span> getpass <span class="k">import</span> getpass
 <span class="k">from</span> openai <span class="k">import</span> OpenAI
 
 client = OpenAI(
-    base_url=<span class="s">"（Colab 專用網址，開通後公布）"</span>,
-    api_key=userdata.get(<span class="s">"EXO_API_KEY"</span>),
-)
-
-response = client.chat.completions.create(
+    base_url=<span class="s">"http://192.168.16.131:8080/v1"</span>,
+    api_key=getpass(<span class="s">"請輸入 API key："</span>),
+)</code></pre>
+  <pre><code>response = client.chat.completions.create(
     model=<span class="s">"gpt-oss-120b"</span>,
-    messages=[{<span class="s">"role"</span>: <span class="s">"user"</span>, <span class="s">"content"</span>: <span class="s">"用一句話介紹 Colab"</span>}],
+    messages=[{<span class="s">"role"</span>: <span class="s">"user"</span>, <span class="s">"content"</span>: <span class="s">"用一句話介紹 Jupyter"</span>}],
 )
 print(response.choices[0].message.content)</code></pre>
-  <p>之後的寫法和 <a href="start.html">快速開始</a>完全一樣：串流、system prompt、多輪對話、JSON 輸出都能直接用。</p>
+  <p>之後的寫法和 <a href="start.html">快速開始</a>完全一樣。</p>
 
-  <div class="tip"><b>分享筆記本前檢查一次。</b> 用 Secrets 存的 key 不會跟著筆記本被分享出去，但如果你曾經把 key 直接寫在程式格裡，記得刪掉，並檢查輸出結果裡有沒有印出 key。</div>
+  <h2>Colab 還是很好用</h2>
+  <p>Colab 適合不需要呼叫 LLM 的部分：Python 練習、資料分析、畫圖、用 Colab 的 GPU 訓練小模型等。只有「呼叫校內 LLM」這一步要在校內電腦上做。</p>
+  <div class="tip"><b>專題分工小技巧：</b> 資料整理、畫圖可以在 Colab 做；需要 AI 的部分寫成獨立的 <code>.py</code> 檔，在校內用 PyCharm 或 JupyterLab 執行，把結果存成 CSV，再拿回 Colab 分析。</div>
 </main>
 
 <footer><div class="wrap">國立臺南第一高級中學 資訊科 · <a href="faq.html">使用規則</a></div></footer>

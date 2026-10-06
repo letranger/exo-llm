@@ -15,7 +15,7 @@
   <a class="l" href="index.html">認識叢集</a>
   <a class="l" href="start.html">快速開始</a>
   <a class="l" href="pycharm.html">PyCharm</a>
-  <a class="l" href="colab.html">Colab</a>
+  <a class="l" href="colab.html">Colab 與 Jupyter</a>
   <a class="l" href="vibe.html">Vibe Coding 與專題</a>
   <a class="l" href="faq.html">規則與 FAQ</a>
 </div></nav>
@@ -67,7 +67,7 @@ client = OpenAI(
     base_url=<span class="s">"http://192.168.16.131:8080/v1"</span>,
     api_key=os.environ[<span class="s">"EXO_API_KEY"</span>],  <span class="c"># key 存在電腦的環境變數裡</span>
 )</code></pre>
-  <p class="muted">PyCharm 設定環境變數的方法見 <a href="pycharm.html#env">PyCharm 設定</a>；Colab 用 <a href="colab.html">Secrets</a>。</p>
+  <p class="muted">PyCharm 設定環境變數的方法見 <a href="pycharm.html#env">PyCharm 設定</a>。</p>
 
   <h2>步驟 3：讓回答一個字一個字出現（串流）</h2>
   <p>加上 <code>stream=True</code>，回答就會像 ChatGPT 一樣邊想邊打字，不用等整段完成：</p>
@@ -153,7 +153,7 @@ print(quiz[<span class="s">"q"</span>])
     <tr><td><code>401</code> AuthenticationError</td><td>key 錯了或被停用</td><td>檢查 key 有沒有多複製到空白；仍不行請問老師</td></tr>
     <tr><td><code>400</code> 沒有這個模型</td><td>model 名稱打錯</td><td>改成 <code>gpt-oss-120b</code></td></tr>
     <tr><td><code>502</code></td><td>叢集沒有回應</td><td>可能正在重開機，稍後再試或通知老師</td></tr>
-    <tr><td>APIConnectionError / 逾時</td><td>連不到伺服器</td><td>確認你在校內網路；Colab 請看 <a href="colab.html">Colab 說明</a></td></tr>
+    <tr><td>APIConnectionError / 逾時</td><td>連不到伺服器</td><td>確認你在校內網路；在 Google Colab 上一定連不到，見 <a href="colab.html">說明</a></td></tr>
     <tr><td>回答是空白</td><td>思考把 max_tokens 用完了</td><td>把 <code>max_tokens</code> 調大，或拿掉</td></tr>
   </table></div>
 
