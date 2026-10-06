@@ -151,7 +151,6 @@ print(quiz[<span class="s">"q"</span>])
   <div class="tbl"><table>
     <tr><th>錯誤</th><th>意思</th><th>怎麼辦</th></tr>
     <tr><td><code>401</code> AuthenticationError</td><td>key 錯了或被停用</td><td>檢查 key 有沒有多複製到空白；仍不行請問老師</td></tr>
-    <tr><td><code>429</code> RateLimitError</td><td>同一組同時超過 2 個請求，或一分鐘超過 20 次</td><td>等上一個回答結束；迴圈裡加 <code>time.sleep(3)</code></td></tr>
     <tr><td><code>400</code> 沒有這個模型</td><td>model 名稱打錯</td><td>改成 <code>gpt-oss-120b</code></td></tr>
     <tr><td><code>502</code></td><td>叢集沒有回應</td><td>可能正在重開機，稍後再試或通知老師</td></tr>
     <tr><td>APIConnectionError / 逾時</td><td>連不到伺服器</td><td>確認你在校內網路；Colab 請看 <a href="colab.html">Colab 說明</a></td></tr>

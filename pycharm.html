@@ -70,7 +70,7 @@ models:
     <li><b>試試看</b>在程式裡選取一段程式碼，按 <code>Cmd/Ctrl + J</code> 把它加進聊天，問「這段程式在做什麼？」。</li>
   </ol>
 
-  <div class="warn"><b>不要開「自動補全」（autocomplete）。</b> 上面的設定刻意沒有 <code>autocomplete</code> 角色。自動補全每打幾個字就會送一次請求，會讓你的 key 一直碰到「同時最多 2 個請求」的限制，也會拖慢全校的速度。</div>
+  <div class="warn"><b>不要開「自動補全」（autocomplete）。</b> 上面的設定刻意沒有 <code>autocomplete</code> 角色。自動補全每打幾個字就會送一次請求，會大量佔用叢集，拖慢所有人的速度，而且 120b 這種大模型做自動補全也太慢。</div>
   <div class="note"><b>Continue 的介面會隨版本更新。</b> 如果找不到上面提到的按鈕，原則都一樣：找到 Continue 的 <code>config.yaml</code>，把 <code>models</code> 設定成上面那樣即可。</div>
 
   <h3>好用的問法</h3>
@@ -86,7 +86,6 @@ models:
   <ul>
     <li><b>Connection error：</b>確認電腦連的是校內網路。在瀏覽器打開 <code>http://192.168.16.131:8080/health</code>，看到 <code>"ok": true</code> 代表叢集正常。</li>
     <li><b>401：</b>key 打錯，或複製時多帶了空白。</li>
-    <li><b>429：</b>同一把 key 同時太多請求。如果組員共用一把 key，請錯開使用。</li>
   </ul>
 
   <p><a class="btn" href="vibe.html">下一步：用 Vibe Coding 做專題 →</a></p>
