@@ -86,9 +86,9 @@ svg text{font-family:var(--sans)}
       <text x="160" y="380" text-anchor="middle" fill="#9a9aa2" font-size="26">Python openai</text>
       <line x1="328" y1="325" x2="410" y2="325" stroke="#9a9aa2" stroke-width="4" marker-end="url(#a)"/>
       <rect x="420" y="225" width="330" height="200" rx="24" fill="#1c1c1f" stroke="#ffc300" stroke-width="3"/>
-      <text x="585" y="288" text-anchor="middle" fill="#ffc300" font-size="36" font-weight="700">API 閘道</text>
-      <text x="585" y="333" text-anchor="middle" fill="#ededed" font-size="26" font-family="JetBrains Mono, monospace">:8080/v1</text>
-      <text x="585" y="373" text-anchor="middle" fill="#9a9aa2" font-size="26">驗證 key · 使用紀錄</text>
+      <text x="585" y="288" text-anchor="middle" fill="#ffc300" font-size="36" font-weight="700">LiteLLM 閘道</text>
+      <text x="585" y="333" text-anchor="middle" fill="#ededed" font-size="26" font-family="JetBrains Mono, monospace">.233:4000/v1</text>
+      <text x="585" y="373" text-anchor="middle" fill="#9a9aa2" font-size="26">分配 key · 用量統計</text>
       <line x1="758" y1="325" x2="880" y2="325" stroke="#9a9aa2" stroke-width="4" marker-end="url(#a)"/>
       <g stroke="#ffc300" stroke-width="5" stroke-dasharray="3 12" stroke-linecap="round">
         <line x1="1090" y1="110" x2="1400" y2="110"/><line x1="1020" y1="180" x2="1180" y2="470"/><line x1="1470" y1="180" x2="1310" y2="470"/>
@@ -175,7 +175,7 @@ svg text{font-family:var(--sans)}
     <h2>幾行 Python 就能用</h2>
 <pre><span class="k">from</span> openai <span class="k">import</span> OpenAI
 
-client = OpenAI(base_url=<span class="s">"http://192.168.16.131:8080/v1"</span>,
+client = OpenAI(base_url=<span class="s">"http://192.168.16.233:4000/v1"</span>,
                 api_key=<span class="s">"你的API key"</span>)
 
 r = client.chat.completions.create(

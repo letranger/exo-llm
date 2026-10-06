@@ -28,7 +28,7 @@
   <h2>你需要的三樣東西</h2>
   <div class="tbl"><table>
     <tr><th>項目</th><th>內容</th></tr>
-    <tr><td>網址（base_url）</td><td><code>http://192.168.16.131:8080/v1</code>（只有校內網路連得到）</td></tr>
+    <tr><td>網址（base_url）</td><td><code>http://192.168.16.233:4000/v1</code>（只有校內網路連得到）</td></tr>
     <tr><td>模型名稱（model）</td><td><code>gpt-oss-120b</code></td></tr>
     <tr><td>API key</td><td>向資訊老師申請，長得像 <code>sk-exo-</code> 開頭的一串亂碼</td></tr>
   </table></div>
@@ -44,7 +44,7 @@
   <pre><code><span class="k">from</span> openai <span class="k">import</span> OpenAI
 
 client = OpenAI(
-    base_url=<span class="s">"http://192.168.16.131:8080/v1"</span>,
+    base_url=<span class="s">"http://192.168.16.233:4000/v1"</span>,
     api_key=<span class="s">"你的API key"</span>,
 )
 
@@ -64,7 +64,7 @@ print(response.choices[0].message.content)</code></pre>
 <span class="k">from</span> openai <span class="k">import</span> OpenAI
 
 client = OpenAI(
-    base_url=<span class="s">"http://192.168.16.131:8080/v1"</span>,
+    base_url=<span class="s">"http://192.168.16.233:4000/v1"</span>,
     api_key=os.environ[<span class="s">"EXO_API_KEY"</span>],  <span class="c"># key 存在電腦的環境變數裡</span>
 )</code></pre>
   <p class="muted">PyCharm 設定環境變數的方法見 <a href="pycharm.html#env">PyCharm 設定</a>。</p>
@@ -93,7 +93,7 @@ print()</code></pre>
   <div class="file">chatbot.py</div>
   <pre><code><span class="k">from</span> openai <span class="k">import</span> OpenAI
 
-client = OpenAI(base_url=<span class="s">"http://192.168.16.131:8080/v1"</span>, api_key=<span class="s">"你的API key"</span>)
+client = OpenAI(base_url=<span class="s">"http://192.168.16.233:4000/v1"</span>, api_key=<span class="s">"你的API key"</span>)
 messages = [{<span class="s">"role"</span>: <span class="s">"system"</span>, <span class="s">"content"</span>: <span class="s">"你是友善的聊天夥伴，用繁體中文簡短回答。"</span>}]
 
 <span class="k">while</span> <span class="k">True</span>:

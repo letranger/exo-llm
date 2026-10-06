@@ -34,7 +34,7 @@
   <p><b>EXO</b> 是一套開源的「分散式推論」軟體：它把一個大型語言模型（LLM）切成好幾段，分給好幾台電腦一起算。就像一本太厚、一個人搬不動的書，拆成三冊由三個人一起搬。</p>
   <p>大型語言模型的參數必須全部放進記憶體才能運作。gpt-oss-120b 有 1200 億個參數，壓縮後約 63 GB；我們每台 Mac mini 只有 48～64 GB 記憶體，單台放不下。EXO 把模型的 36 層切成三段，每台負責一段，再用 Thunderbolt 線把運算結果接力傳下去。</p>
 
-  <div class="diagram" role="img" aria-label="架構圖：學生透過 API 閘道連到三台以 Thunderbolt RDMA 互連的 Mac mini">
+  <div class="diagram" role="img" aria-label="架構圖：學生透過 LiteLLM 閘道連到三台以 Thunderbolt RDMA 互連的 Mac mini">
     <svg viewBox="0 0 960 430" xmlns="http://www.w3.org/2000/svg" font-family="Noto Sans TC, PingFang TC, sans-serif">
       <defs>
         <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#9a9aa2"/></marker>
@@ -47,10 +47,10 @@
       <line x1="204" y1="215" x2="262" y2="215" stroke="#9a9aa2" stroke-width="2" marker-end="url(#ar)"/>
       <!-- 閘道 -->
       <rect x="268" y="150" width="200" height="130" rx="14" fill="#1c1c1f" stroke="#ffc300" stroke-width="1.5"/>
-      <text x="368" y="188" text-anchor="middle" fill="#ffc300" font-size="17" font-weight="700">API 閘道</text>
-      <text x="368" y="212" text-anchor="middle" fill="#ededed" font-size="13.5" font-family="JetBrains Mono, monospace">:8080/v1</text>
-      <text x="368" y="236" text-anchor="middle" fill="#9a9aa2" font-size="13.5">驗證 API key</text>
-      <text x="368" y="258" text-anchor="middle" fill="#9a9aa2" font-size="13.5">使用紀錄</text>
+      <text x="368" y="188" text-anchor="middle" fill="#ffc300" font-size="17" font-weight="700">LiteLLM 閘道</text>
+      <text x="368" y="212" text-anchor="middle" fill="#ededed" font-size="13.5" font-family="JetBrains Mono, monospace">.233:4000/v1</text>
+      <text x="368" y="236" text-anchor="middle" fill="#9a9aa2" font-size="13.5">分配 API key</text>
+      <text x="368" y="258" text-anchor="middle" fill="#9a9aa2" font-size="13.5">用量統計</text>
       <line x1="472" y1="215" x2="560" y2="215" stroke="#9a9aa2" stroke-width="2" marker-end="url(#ar)"/>
       <!-- Thunderbolt 三角 -->
       <g stroke="#ffc300" stroke-width="3" stroke-dasharray="2 7" stroke-linecap="round">

@@ -35,8 +35,8 @@
       <line x1="474" y1="110" x2="556" y2="110" stroke="#5ad17a" stroke-width="2.5"/>
       <text x="515" y="98" text-anchor="middle" fill="#5ad17a" font-size="18">✓</text>
       <rect x="560" y="70" width="160" height="80" rx="12" fill="#1c1c1f" stroke="#ffc300"/>
-      <text x="640" y="105" text-anchor="middle" fill="#ffc300" font-size="16" font-weight="700">EXO 叢集</text>
-      <text x="640" y="130" text-anchor="middle" fill="#9a9aa2" font-size="13">192.168.16.131</text>
+      <text x="640" y="105" text-anchor="middle" fill="#ffc300" font-size="16" font-weight="700">校內 LLM</text>
+      <text x="640" y="130" text-anchor="middle" fill="#9a9aa2" font-size="13">192.168.16.233</text>
       <rect x="20" y="150" width="190" height="80" rx="12" fill="#1c1c1f" stroke="#2a2a2e"/>
       <text x="115" y="185" text-anchor="middle" fill="#ededed" font-size="16" font-weight="700">Google Colab</text>
       <text x="115" y="210" text-anchor="middle" fill="#9a9aa2" font-size="13">Google 雲端機房</text>
@@ -56,7 +56,7 @@
 <span class="k">from</span> openai <span class="k">import</span> OpenAI
 
 client = OpenAI(
-    base_url=<span class="s">"http://192.168.16.131:8080/v1"</span>,
+    base_url=<span class="s">"http://192.168.16.233:4000/v1"</span>,
     api_key=getpass(<span class="s">"請輸入 API key："</span>),
 )</code></pre>
   <pre><code>response = client.chat.completions.create(
