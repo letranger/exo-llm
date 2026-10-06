@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vibe Coding 與專題 · EXO-LLM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<nav class="nav"><div class="nav-in">
+  <a class="brand" href="index.html"><b>EXO</b>-LLM @ TNFSH</a>
+  <a class="l" href="index.html">認識叢集</a>
+  <a class="l" href="start.html">快速開始</a>
+  <a class="l" href="pycharm.html">PyCharm</a>
+  <a class="l" href="colab.html">Colab</a>
+  <a class="l" href="vibe.html">Vibe Coding 與專題</a>
+  <a class="l" href="faq.html">規則與 FAQ</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="eyebrow">Vibe Coding × Projects</div>
+  <h1>用 AI 一起寫 Python 專題</h1>
+  <p class="lead">Vibe coding 是用自然語言描述你想要的東西，讓 AI 幫你產生程式，你負責測試、理解、修正和做決定。這台叢集在專題裡可以扮演兩種角色：<b>幫你寫程式的助教</b>，以及<b>你程式裡的 AI 功能</b>。</p>
+
+  <h2 id="coding">角色一：寫程式的助教</h2>
+  <h3>Vibe coding 的循環</h3>
+  <ol class="steps">
+    <li><b>描述</b>說清楚你要什麼：輸入是什麼、輸出是什麼、有什麼限制。</li>
+    <li><b>產生</b>讓 AI 寫出第一版。一次只做一個小功能，不要一口氣要整個專題。</li>
+    <li><b>執行</b>真的跑起來，用你自己準備的資料測試。</li>
+    <li><b>讀錯誤</b>出錯時把完整錯誤訊息貼給 AI，問它「為什麼」，而不只是「幫我修」。</li>
+    <li><b>弄懂</b>確定你看懂每一行再進下一步。看不懂就請 AI 逐行解釋。</li>
+  </ol>
+
+  <h3>好的提示詞長這樣</h3>
+  <div class="tbl"><table>
+    <tr><th>✗ 太模糊</th><th>✓ 具體</th></tr>
+    <tr><td>幫我寫一個成績程式</td><td>寫一個 Python 函式 <code>grade(score)</code>：輸入 0～100 的整數，90 以上回傳 "A"、80 以上 "B"、70 以上 "C"，其餘 "F"。輸入超出範圍時 raise ValueError。附上 5 個測試。</td></tr>
+    <tr><td>程式壞了</td><td>我執行 <code>python main.py</code> 出現下面的錯誤，第 12 行的 <code>data</code> 是從 CSV 讀進來的 list。請解釋原因，先給我提示，不要直接改：（貼上完整錯誤）</td></tr>
+    <tr><td>讓它更好</td><td>這段程式在處理 1 萬筆資料時要跑 30 秒。可能的瓶頸在哪？給我兩種改法並比較優缺點。</td></tr>
+  </table></div>
+
+  <div class="warn"><b>AI 會出錯，而且出錯時語氣一樣很有自信。</b> 它寫的程式一定要自己執行、自己測試。專題報告裡請誠實記錄哪些部分是 AI 協助產生的，以及你做了哪些修改和判斷。</div>
+
+  <h2 id="app">角色二：放進你程式裡的 AI 功能</h2>
+  <p>你的專題程式本身也可以呼叫 AI。幾個高中生做得到的方向：</p>
+  <div class="grid">
+    <div class="card"><div class="k">教育</div><h3>自動出題機</h3><p>輸入一段課文，用 JSON 輸出選擇題，再用 Python 做成測驗小遊戲並計分。</p></div>
+    <div class="card"><div class="k">寫作</div><h3>作文回饋助手</h3><p>依照你們自訂的評分規準，給出具體的修改建議，而不是直接改寫。</p></div>
+    <div class="card"><div class="k">遊戲</div><h3>會說話的 NPC</h3><p>用 system prompt 設定角色個性，讓文字冒險遊戲的角色真的能跟玩家對話。</p></div>
+    <div class="card"><div class="k">資料</div><h3>資料分析小幫手</h3><p>讀入 CSV，讓 AI 用自然語言解釋統計結果，或建議可以畫哪些圖。</p></div>
+    <div class="card"><div class="k">文化</div><h3>解籤機器人</h3><p>結合籤詩資料庫與 AI，給出白話解釋。可以搭配下面的 RAG 做。</p></div>
+    <div class="card"><div class="k">生活</div><h3>校園問答</h3><p>把校規、行事曆、社團介紹做成問答系統，新生入學時就能用。</p></div>
+  </div>
+
+  <h2 id="rag">RAG：讓 AI 根據你的資料回答</h2>
+  <p>AI 不知道你們學校的校規，也可能憑空編造。<b>RAG（檢索增強生成）</b>的做法是：先從你的資料裡找出相關段落，再把這些段落和問題一起交給 AI，要求它「只根據這些資料回答」。</p>
+  <p>下面是最簡單的版本，不需要額外安裝其他套件。把你的資料存成 <code>校規.txt</code>，段落之間空一行：</p>
+  <div class="file">rag.py</div>
+  <pre><code><span class="k">from</span> openai <span class="k">import</span> OpenAI
+
+client = OpenAI(base_url=<span class="s">"http://192.168.16.131:8080/v1"</span>, api_key=<span class="s">"你的API key"</span>)
+
+<span class="c"># 1. 讀入資料，用空行切成段落</span>
+text = open(<span class="s">"校規.txt"</span>, encoding=<span class="s">"utf-8"</span>).read()
+chunks = [p.strip() <span class="k">for</span> p <span class="k">in</span> text.split(<span class="s">"\n\n"</span>) <span class="k">if</span> p.strip()]
+
+<span class="c"># 2. 找出和問題最相關的段落（比對「兩個字的詞組」重疊多少）</span>
+<span class="k">def</span> bigrams(s):
+    <span class="k">return</span> {s[i:i+2] <span class="k">for</span> i <span class="k">in</span> range(len(s) - 1)}
+
+<span class="k">def</span> search(question, k=2):
+    q = bigrams(question)
+    <span class="k">return</span> sorted(chunks, key=<span class="k">lambda</span> c: len(q &amp; bigrams(c)), reverse=<span class="k">True</span>)[:k]
+
+<span class="c"># 3. 把找到的段落放進提示詞，請 AI 只根據資料回答</span>
+<span class="k">def</span> ask(question):
+    context = <span class="s">"\n\n"</span>.join(search(question))
+    response = client.chat.completions.create(
+        model=<span class="s">"gpt-oss-120b"</span>,
+        messages=[
+            {<span class="s">"role"</span>: <span class="s">"system"</span>, <span class="s">"content"</span>: <span class="s">"只根據提供的資料，用繁體中文回答。資料裡沒有的，就回答「資料中沒有提到」。"</span>},
+            {<span class="s">"role"</span>: <span class="s">"user"</span>, <span class="s">"content"</span>: <span class="s">f"資料：\n{context}\n\n問題：{question}"</span>},
+        ],
+        reasoning_effort=<span class="s">"low"</span>,
+    )
+    <span class="k">return</span> response.choices[0].message.content
+
+print(ask(<span class="s">"圖書館的書可以借多久？"</span>))
+print(ask(<span class="s">"學校有游泳池嗎？"</span>))   <span class="c"># 資料裡沒有 → 應回答「資料中沒有提到」</span></code></pre>
+  <div class="tip"><b>進階挑戰：</b> 把第 2 步換成「向量搜尋」（embedding），讓「借書期限」和「書可以借多久」這種用字不同但意思相同的問題也找得到。這就是專題可以深入比較的地方。</div>
+
+  <h2 id="agent">Agent：讓 AI 會使用工具</h2>
+  <p>gpt-oss 支援「工具呼叫」（function calling）：你告訴它有哪些 Python 函式可以用，它會自己決定什麼時候呼叫、要帶什麼參數。這是 AI Agent 的基礎。</p>
+  <pre><code>tools = [{
+    <span class="s">"type"</span>: <span class="s">"function"</span>,
+    <span class="s">"function"</span>: {
+        <span class="s">"name"</span>: <span class="s">"get_weather"</span>,
+        <span class="s">"description"</span>: <span class="s">"查詢城市目前天氣"</span>,
+        <span class="s">"parameters"</span>: {<span class="s">"type"</span>: <span class="s">"object"</span>,
+                       <span class="s">"properties"</span>: {<span class="s">"city"</span>: {<span class="s">"type"</span>: <span class="s">"string"</span>}},
+                       <span class="s">"required"</span>: [<span class="s">"city"</span>]},
+    },
+}]
+response = client.chat.completions.create(
+    model=<span class="s">"gpt-oss-120b"</span>,
+    messages=[{<span class="s">"role"</span>: <span class="s">"user"</span>, <span class="s">"content"</span>: <span class="s">"台南現在天氣怎樣？"</span>}],
+    tools=tools,
+)
+call = response.choices[0].message.tool_calls[0]
+print(call.function.name, call.function.arguments)   <span class="c"># get_weather {"city": "Tainan"}</span></code></pre>
+  <p class="muted">接著由你的程式真的去執行 <code>get_weather</code>，把結果用 <code>"role": "tool"</code> 傳回給 AI，它就會用結果組出最後的回答。</p>
+
+  <h2 id="research">把叢集本身當研究題目</h2>
+  <p>很少高中有機會直接觀察大型語言模型怎麼在多台電腦上運作。可以發展成科展或小論文的方向：</p>
+  <ul>
+    <li><b>分散方式的比較：</b>Pipeline（分層接力）和 Tensor（每層拆開同時算）在速度上差多少？我們實測 2 台 Tensor 比單機快 1.85 倍，3 台 Pipeline 則和單機差不多。為什麼？</li>
+    <li><b>量化對品質的影響：</b>同一個模型的 4bit、8bit 版本，答題正確率和速度差多少？</li>
+    <li><b>能源效率：</b>每產生一個 token 要消耗多少焦耳？和雲端服務比較如何？</li>
+    <li><b>多人使用：</b>同時 1、5、10、30 人使用時，等待時間怎麼變化？可以設計更公平的排隊方式嗎？</li>
+    <li><b>提示詞工程：</b>同一題用不同的提示詞或 <code>reasoning_effort</code>，正確率差多少？</li>
+  </ul>
+  <p>做這類研究需要更多權限或資料，請和資訊老師討論。</p>
+
+  <h2>用量的禮貌</h2>
+  <p>叢集同時大約只能服務 6 個請求，是全校共用的資源：</p>
+  <ul>
+    <li>要大量處理資料（例如一次分析 500 篇文章）時，迴圈裡加 <code>time.sleep(3)</code>，並避開上課時間。</li>
+    <li>聊天、翻譯這類簡單任務用 <code>reasoning_effort="low"</code>，回得快也比較不佔資源。</li>
+    <li>先用 5 筆資料測試成功，再跑全部。</li>
+  </ul>
+</main>
+
+<footer><div class="wrap">國立臺南第一高級中學 資訊科 · <a href="faq.html">使用規則</a></div></footer>
+<script src="assets/site.js"></script>
+</body>
+</html>

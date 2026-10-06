@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PyCharm 設定 · EXO-LLM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<nav class="nav"><div class="nav-in">
+  <a class="brand" href="index.html"><b>EXO</b>-LLM @ TNFSH</a>
+  <a class="l" href="index.html">認識叢集</a>
+  <a class="l" href="start.html">快速開始</a>
+  <a class="l" href="pycharm.html">PyCharm</a>
+  <a class="l" href="colab.html">Colab</a>
+  <a class="l" href="vibe.html">Vibe Coding 與專題</a>
+  <a class="l" href="faq.html">規則與 FAQ</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="eyebrow">PyCharm</div>
+  <h1>在 PyCharm 裡使用校內 LLM</h1>
+  <p class="lead">這一頁分成兩部分：第一部分讓你的 Python 程式呼叫叢集；第二部分把叢集接成 PyCharm 側邊欄的 AI 助教，寫程式時直接問它。</p>
+
+  <h2>Part 1：讓你的程式呼叫叢集</h2>
+  <ol class="steps">
+    <li><b>建立專案</b>File → New Project，Interpreter 選「Project venv」（虛擬環境），按 Create。</li>
+    <li><b>安裝 openai 套件</b>點下方的 <b>Terminal</b> 分頁，輸入 <code>pip install openai</code>。也可以用 View → Tool Windows → <b>Python Packages</b>，搜尋 openai 後按 Install。</li>
+    <li><b>新增程式檔</b>在專案上按右鍵 → New → Python File，貼上 <a href="start.html">快速開始</a>的第一支程式，按右上角綠色 ▶ 執行。</li>
+  </ol>
+
+  <h3 id="env">把 key 設成環境變數（建議）</h3>
+  <p>這樣 key 就不會出現在程式碼裡，上傳 GitHub 也不怕外流：</p>
+  <ol class="steps">
+    <li><b>打開執行設定</b>右上角程式名稱旁的下拉選單 → <b>Edit Configurations…</b></li>
+    <li><b>填入環境變數</b>在 <b>Environment variables</b> 欄位輸入 <code>EXO_API_KEY=你的API key</code>，按 OK。</li>
+    <li><b>程式裡改用環境變數</b><code>api_key=os.environ["EXO_API_KEY"]</code>（記得 <code>import os</code>）。</li>
+  </ol>
+  <div class="note"><b>每個執行設定要各自設定一次。</b> 新的程式檔第一次執行會產生新的設定。也可以在 Edit Configurations 視窗左下角的 <b>Edit configuration templates…</b> → Python 裡設定一次，之後新建的設定都會自動帶入。</div>
+
+  <h2>Part 2：把叢集變成 PyCharm 的 AI 助教</h2>
+  <p>我們使用免費的開源外掛 <b>Continue</b>。裝好後 PyCharm 側邊會多一個聊天視窗，可以選取程式碼請 AI 解釋、修改或除錯，而且背後用的是校內叢集，不用付費、也不用註冊任何雲端帳號。</p>
+
+  <ol class="steps">
+    <li><b>安裝外掛</b>Settings（macOS 是 PyCharm → Settings）→ <b>Plugins</b> → Marketplace，搜尋 <b>Continue</b>，按 Install，裝好後重新啟動 PyCharm。</li>
+    <li><b>打開設定檔</b>右側工具列點 Continue 圖示打開聊天面板，點面板上方的齒輪或模型選單，選擇開啟設定（config）。它會打開一個 <code>config.yaml</code>，位置在使用者資料夾的 <code>.continue</code> 資料夾裡。</li>
+    <li><b>貼上設定</b>把整個檔案內容換成下面這段，<code>apiKey</code> 填你的 key，存檔。</li>
+  </ol>
+
+  <div class="file">~/.continue/config.yaml</div>
+  <pre><code>name: TNFSH EXO
+version: 1.0.0
+schema: v1
+models:
+  - name: gpt-oss-120b（校內）
+    provider: openai
+    model: gpt-oss-120b
+    apiBase: http://192.168.16.131:8080/v1
+    apiKey: 你的API key
+    roles:
+      - chat
+      - edit
+      - apply</code></pre>
+
+  <ol class="steps" start="4" style="counter-reset: s 3">
+    <li><b>選擇模型</b>回到 Continue 聊天面板，在模型下拉選單選「gpt-oss-120b（校內）」。</li>
+    <li><b>試試看</b>在程式裡選取一段程式碼，按 <code>Cmd/Ctrl + J</code> 把它加進聊天，問「這段程式在做什麼？」。</li>
+  </ol>
+
+  <div class="warn"><b>不要開「自動補全」（autocomplete）。</b> 上面的設定刻意沒有 <code>autocomplete</code> 角色。自動補全每打幾個字就會送一次請求，會讓你的 key 一直碰到「同時最多 2 個請求」的限制，也會拖慢全校的速度。</div>
+  <div class="note"><b>Continue 的介面會隨版本更新。</b> 如果找不到上面提到的按鈕，原則都一樣：找到 Continue 的 <code>config.yaml</code>，把 <code>models</code> 設定成上面那樣即可。</div>
+
+  <h3>好用的問法</h3>
+  <div class="tbl"><table>
+    <tr><th>情境</th><th>可以這樣問</th></tr>
+    <tr><td>看不懂錯誤</td><td>貼上錯誤訊息：「這個錯誤是什麼意思？是哪一行造成的？先不要直接改，給我提示」</td></tr>
+    <tr><td>看不懂程式</td><td>選取程式碼：「用高中生聽得懂的話，逐行解釋這段程式」</td></tr>
+    <tr><td>想改進</td><td>「這段程式可以怎麼寫得更簡潔？說明為什麼比較好」</td></tr>
+    <tr><td>寫測試</td><td>「幫這個函式想 5 組測試資料，包含邊界情況」</td></tr>
+  </table></div>
+
+  <h2>連不上？</h2>
+  <ul>
+    <li><b>Connection error：</b>確認電腦連的是校內網路。在瀏覽器打開 <code>http://192.168.16.131:8080/health</code>，看到 <code>"ok": true</code> 代表叢集正常。</li>
+    <li><b>401：</b>key 打錯，或複製時多帶了空白。</li>
+    <li><b>429：</b>同一把 key 同時太多請求。如果組員共用一把 key，請錯開使用。</li>
+  </ul>
+
+  <p><a class="btn" href="vibe.html">下一步：用 Vibe Coding 做專題 →</a></p>
+</main>
+
+<footer><div class="wrap">國立臺南第一高級中學 資訊科 · <a href="faq.html">使用規則</a></div></footer>
+<script src="assets/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>快速開始 · EXO-LLM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<nav class="nav"><div class="nav-in">
+  <a class="brand" href="index.html"><b>EXO</b>-LLM @ TNFSH</a>
+  <a class="l" href="index.html">認識叢集</a>
+  <a class="l" href="start.html">快速開始</a>
+  <a class="l" href="pycharm.html">PyCharm</a>
+  <a class="l" href="colab.html">Colab</a>
+  <a class="l" href="vibe.html">Vibe Coding 與專題</a>
+  <a class="l" href="faq.html">規則與 FAQ</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="eyebrow">Quick Start</div>
+  <h1>5 分鐘寫出第一支 AI 程式</h1>
+  <p class="lead">這台叢集的用法和 OpenAI 的 ChatGPT API 完全相同，所以我們直接用官方的 <code>openai</code> 套件，只是把網址換成校內的叢集。</p>
+
+  <h2>你需要的三樣東西</h2>
+  <div class="tbl"><table>
+    <tr><th>項目</th><th>內容</th></tr>
+    <tr><td>網址（base_url）</td><td><code>http://192.168.16.131:8080/v1</code>（只有校內網路連得到）</td></tr>
+    <tr><td>模型名稱（model）</td><td><code>gpt-oss-120b</code></td></tr>
+    <tr><td>API key</td><td>向資訊老師申請，長得像 <code>sk-exo-</code> 開頭的一串亂碼</td></tr>
+  </table></div>
+
+  <h2>步驟 1：安裝 openai 套件</h2>
+  <p>在終端機（Windows 是「命令提示字元」或 PowerShell）輸入：</p>
+  <pre><code>pip install openai</code></pre>
+  <p class="muted">用 PyCharm 的同學也可以在 PyCharm 下方的 Terminal 分頁輸入同一行，或看 <a href="pycharm.html">PyCharm 設定</a>。</p>
+
+  <h2>步驟 2：第一支程式</h2>
+  <p>建立一個 <code>hello_ai.py</code>，把 <code>你的API key</code> 換成老師給你的 key：</p>
+  <div class="file">hello_ai.py</div>
+  <pre><code><span class="k">from</span> openai <span class="k">import</span> OpenAI
+
+client = OpenAI(
+    base_url=<span class="s">"http://192.168.16.131:8080/v1"</span>,
+    api_key=<span class="s">"你的API key"</span>,
+)
+
+response = client.chat.completions.create(
+    model=<span class="s">"gpt-oss-120b"</span>,
+    messages=[
+        {<span class="s">"role"</span>: <span class="s">"user"</span>, <span class="s">"content"</span>: <span class="s">"用一句話介紹 Python"</span>},
+    ],
+)
+
+print(response.choices[0].message.content)</code></pre>
+  <p>執行後，大約幾秒內就會印出 AI 的回答。恭喜，你已經在用 1200 億參數的模型了。</p>
+  <div class="warn"><b>key 不要寫死在程式裡交出去。</b> 練習時可以先這樣寫，但要上傳 GitHub 或交作業前，請改用下面的「環境變數」寫法，或把 key 刪掉。外流的 key 老師會直接停用。</div>
+
+  <h3>更安全的寫法：從環境變數讀 key</h3>
+  <pre><code><span class="k">import</span> os
+<span class="k">from</span> openai <span class="k">import</span> OpenAI
+
+client = OpenAI(
+    base_url=<span class="s">"http://192.168.16.131:8080/v1"</span>,
+    api_key=os.environ[<span class="s">"EXO_API_KEY"</span>],  <span class="c"># key 存在電腦的環境變數裡</span>
+)</code></pre>
+  <p class="muted">PyCharm 設定環境變數的方法見 <a href="pycharm.html#env">PyCharm 設定</a>；Colab 用 <a href="colab.html">Secrets</a>。</p>
+
+  <h2>步驟 3：讓回答一個字一個字出現（串流）</h2>
+  <p>加上 <code>stream=True</code>，回答就會像 ChatGPT 一樣邊想邊打字，不用等整段完成：</p>
+  <pre><code>stream = client.chat.completions.create(
+    model=<span class="s">"gpt-oss-120b"</span>,
+    messages=[{<span class="s">"role"</span>: <span class="s">"user"</span>, <span class="s">"content"</span>: <span class="s">"寫一首關於臺南的短詩"</span>}],
+    stream=<span class="k">True</span>,
+)
+<span class="k">for</span> chunk <span class="k">in</span> stream:
+    <span class="k">if</span> chunk.choices <span class="k">and</span> chunk.choices[0].delta.content:
+        print(chunk.choices[0].delta.content, end=<span class="s">""</span>, flush=<span class="k">True</span>)
+print()</code></pre>
+
+  <h2>步驟 4：給 AI 一個角色（system prompt）</h2>
+  <p><code>messages</code> 最前面加一則 <code>"role": "system"</code>，就能設定 AI 的身分、語氣和規則：</p>
+  <pre><code>messages = [
+    {<span class="s">"role"</span>: <span class="s">"system"</span>, <span class="s">"content"</span>: <span class="s">"你是高中 Python 助教。用繁體中文回答，先給提示，不要直接給完整答案。"</span>},
+    {<span class="s">"role"</span>: <span class="s">"user"</span>, <span class="s">"content"</span>: <span class="s">"我的 while 迴圈停不下來"</span>},
+]</code></pre>
+
+  <h2>步驟 5：做一個會記得上下文的聊天機器人</h2>
+  <p>AI 本身不會記得之前說過什麼。要讓它「記得」，就把整段對話都放進 <code>messages</code> 再送一次：</p>
+  <div class="file">chatbot.py</div>
+  <pre><code><span class="k">from</span> openai <span class="k">import</span> OpenAI
+
+client = OpenAI(base_url=<span class="s">"http://192.168.16.131:8080/v1"</span>, api_key=<span class="s">"你的API key"</span>)
+messages = [{<span class="s">"role"</span>: <span class="s">"system"</span>, <span class="s">"content"</span>: <span class="s">"你是友善的聊天夥伴，用繁體中文簡短回答。"</span>}]
+
+<span class="k">while</span> <span class="k">True</span>:
+    user = input(<span class="s">"你："</span>)
+    <span class="k">if</span> user <span class="k">in</span> (<span class="s">"bye"</span>, <span class="s">"再見"</span>):
+        <span class="k">break</span>
+    messages.append({<span class="s">"role"</span>: <span class="s">"user"</span>, <span class="s">"content"</span>: user})
+    reply = client.chat.completions.create(model=<span class="s">"gpt-oss-120b"</span>, messages=messages)
+    answer = reply.choices[0].message.content
+    print(<span class="s">"AI："</span>, answer)
+    messages.append({<span class="s">"role"</span>: <span class="s">"assistant"</span>, <span class="s">"content"</span>: answer})</code></pre>
+
+  <h2>gpt-oss 的特色：先思考，再回答</h2>
+  <p>gpt-oss-120b 是「推理模型」：回答前會先在內部想一遍。這讓它答得更準，但有兩件事要知道：</p>
+
+  <h3>1. max_tokens 不要設太小</h3>
+  <p><code>max_tokens</code> 限制的是「思考＋回答」的總長度。我們實測設成 40 時，40 個 token 全被拿去思考，<b>回答變成空白</b>。</p>
+  <div class="tip"><b>建議：</b> 不設 <code>max_tokens</code>（閘道預設上限 4096），或至少設 500 以上。如果發現 <code>content</code> 是空的，而且 <code>finish_reason</code> 是 <code>"length"</code>，就是這個原因。</div>
+
+  <h3>2. 用 reasoning_effort 調整思考深度</h3>
+  <pre><code>response = client.chat.completions.create(
+    model=<span class="s">"gpt-oss-120b"</span>,
+    messages=[{<span class="s">"role"</span>: <span class="s">"user"</span>, <span class="s">"content"</span>: <span class="s">"17 × 23 = ?"</span>}],
+    reasoning_effort=<span class="s">"low"</span>,   <span class="c"># low / medium / high</span>
+)</code></pre>
+  <div class="tbl"><table>
+    <tr><th>設定</th><th>適合</th></tr>
+    <tr><td><code>"low"</code></td><td>聊天、翻譯、簡單問答。回得最快</td></tr>
+    <tr><td><code>"medium"</code></td><td>預設值，一般程式問題</td></tr>
+    <tr><td><code>"high"</code></td><td>難的數學、邏輯題、除錯。比較慢但比較準</td></tr>
+  </table></div>
+
+  <h3>想看它在想什麼？</h3>
+  <p>思考過程放在 <code>reasoning_content</code> 欄位，通常是英文：</p>
+  <pre><code>msg = response.choices[0].message
+print(<span class="s">"思考："</span>, getattr(msg, <span class="s">"reasoning_content"</span>, <span class="k">None</span>))
+print(<span class="s">"回答："</span>, msg.content)</code></pre>
+
+  <h2>讓 AI 輸出 JSON（給程式用）</h2>
+  <p>要把 AI 的回答交給程式處理（例如自動出題系統），可以要求它只輸出 JSON：</p>
+  <pre><code><span class="k">import</span> json
+
+response = client.chat.completions.create(
+    model=<span class="s">"gpt-oss-120b"</span>,
+    messages=[{<span class="s">"role"</span>: <span class="s">"user"</span>, <span class="s">"content"</span>:
+        <span class="s">'出一題高中數學選擇題，只輸出 JSON：{"q": 題目, "options": [四個選項], "answer": 正確選項}'</span>}],
+    response_format={<span class="s">"type"</span>: <span class="s">"json_object"</span>},
+)
+quiz = json.loads(response.choices[0].message.content)
+print(quiz[<span class="s">"q"</span>])
+<span class="k">for</span> opt <span class="k">in</span> quiz[<span class="s">"options"</span>]:
+    print(<span class="s">" -"</span>, opt)</code></pre>
+
+  <h2>出錯了怎麼辦？</h2>
+  <div class="tbl"><table>
+    <tr><th>錯誤</th><th>意思</th><th>怎麼辦</th></tr>
+    <tr><td><code>401</code> AuthenticationError</td><td>key 錯了或被停用</td><td>檢查 key 有沒有多複製到空白；仍不行請問老師</td></tr>
+    <tr><td><code>429</code> RateLimitError</td><td>同一組同時超過 2 個請求，或一分鐘超過 20 次</td><td>等上一個回答結束；迴圈裡加 <code>time.sleep(3)</code></td></tr>
+    <tr><td><code>400</code> 沒有這個模型</td><td>model 名稱打錯</td><td>改成 <code>gpt-oss-120b</code></td></tr>
+    <tr><td><code>502</code></td><td>叢集沒有回應</td><td>可能正在重開機，稍後再試或通知老師</td></tr>
+    <tr><td>APIConnectionError / 逾時</td><td>連不到伺服器</td><td>確認你在校內網路；Colab 請看 <a href="colab.html">Colab 說明</a></td></tr>
+    <tr><td>回答是空白</td><td>思考把 max_tokens 用完了</td><td>把 <code>max_tokens</code> 調大，或拿掉</td></tr>
+  </table></div>
+
+  <p><a class="btn" href="pycharm.html">下一步：在 PyCharm 裡設定 AI 助教 →</a></p>
+</main>
+
+<footer><div class="wrap">國立臺南第一高級中學 資訊科 · <a href="faq.html">使用規則</a></div></footer>
+<script src="assets/site.js"></script>
+</body>
+</html>

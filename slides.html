@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EXO-LLM 輪播</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b0b0c;--surface:#141416;--raised:#1c1c1f;--line:#2a2a2e;--text:#ededed;--muted:#9a9aa2;--accent:#ffc300;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;--sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);overflow:hidden}
+body.idle{cursor:none}
+#stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform-origin:center;overflow:hidden;font-family:var(--sans);color:var(--text)}
+.slide{position:absolute;inset:0;padding:110px 140px 120px;opacity:0;transition:opacity .9s ease;display:flex;flex-direction:column;justify-content:center}
+.slide.on{opacity:1}
+.eye{font:700 26px/1 var(--mono);letter-spacing:.18em;color:var(--accent);text-transform:uppercase;margin-bottom:34px}
+h1{font-size:104px;line-height:1.12;margin:0 0 34px;font-weight:900;letter-spacing:-.01em}
+h2{font-size:76px;line-height:1.18;margin:0 0 40px;font-weight:900}
+.y{color:var(--accent)}
+.big{font-size:42px;line-height:1.6;color:#d6d6db;max-width:1500px;margin:0}
+.big b{color:var(--text)}
+.sub{font-size:34px;color:var(--muted);margin-top:28px}
+.row{display:grid;gap:28px}
+.c3{grid-template-columns:repeat(3,1fr)}.c2{grid-template-columns:repeat(2,1fr)}.c4{grid-template-columns:repeat(4,1fr)}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:26px;padding:40px 40px 36px}
+.box .k{font:700 22px/1 var(--mono);color:var(--accent);letter-spacing:.12em}
+.box h3{font-size:44px;margin:18px 0 12px;font-weight:700}
+.box p{font-size:29px;line-height:1.55;color:var(--muted);margin:0}
+.stat .v{font:700 108px/1 var(--mono);color:var(--accent)}
+.stat .v small{font-size:40px;color:var(--muted);margin-left:8px;font-weight:500}
+.stat .d{font-size:31px;color:#cfcfd4;margin-top:18px;line-height:1.45}
+.flow{display:flex;align-items:stretch;gap:0;margin-top:20px}
+.flow .st{flex:1;background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:34px 26px;text-align:center}
+.flow .st .n{font:700 30px/1 var(--mono);color:var(--bg);background:var(--accent);width:58px;height:58px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center}
+.flow .st h3{font-size:42px;margin:22px 0 10px}
+.flow .st p{font-size:26px;color:var(--muted);margin:0;line-height:1.5}
+.flow .ar{width:56px;display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:44px}
+pre{font:500 33px/1.6 var(--mono);background:#101012;border:1px solid var(--line);border-radius:24px;padding:44px 52px;margin:0;color:#e6e6e6}
+pre .s{color:#ffd65c}pre .k{color:#ff9f6b}pre .c{color:#7d7d86}
+.rules{list-style:none;padding:0;margin:0;display:grid;gap:26px}
+.rules li{font-size:40px;line-height:1.45;display:flex;gap:28px;align-items:baseline}
+.rules li span{font:700 34px/1 var(--mono);color:var(--accent);min-width:60px}
+.rules li em{font-style:normal;color:var(--muted);font-size:32px}
+.cta{display:grid;grid-template-columns:1fr 470px;gap:90px;align-items:center}
+.qr{background:var(--accent);border-radius:30px;padding:26px}
+.qr img{width:100%;display:block}
+.url{font:700 54px/1.3 var(--mono);color:var(--accent);margin:26px 0 40px;word-break:break-all}
+#bar{position:absolute;left:0;bottom:0;height:8px;background:var(--accent);width:0}
+#dots{position:absolute;right:140px;bottom:52px;display:flex;gap:14px}
+#dots i{width:14px;height:14px;border-radius:50%;background:#3a3a40}
+#dots i.on{background:var(--accent)}
+#foot{position:absolute;left:140px;bottom:44px;font:500 24px/1 var(--mono);color:#6d6d75;letter-spacing:.06em}
+.glow{position:absolute;right:-260px;top:-260px;width:900px;height:900px;border-radius:50%;background:radial-gradient(circle,rgba(255,195,0,.16),transparent 65%);pointer-events:none}
+svg text{font-family:var(--sans)}
+@media (prefers-reduced-motion:reduce){.slide{transition:none}}
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <section class="slide" data-sec="11">
+    <div class="glow"></div>
+    <div class="eye">TNFSH · 校內 AI 叢集</div>
+    <h1>三台 Mac mini，<br>串成一顆 <span class="y">1200 億參數</span>的大腦</h1>
+    <p class="big">這就是你眼前的 <b>EXO-LLM</b>：一台放不下的大型語言模型，三台一起跑。<br>Python 課程與 AI 專題，免費使用。</p>
+  </section>
+
+  <section class="slide" data-sec="13">
+    <div class="eye">What is EXO?</div>
+    <h2>把一個太大的 AI，<span class="y">切開來</span>一起算</h2>
+    <p class="big"><b>EXO</b> 是開源的「分散式推論」軟體。它把大型語言模型的 36 層切成三段，每台 Mac mini 負責一段，算完就透過 Thunderbolt 線把結果<b>接力</b>傳給下一台。</p>
+    <p class="sub">就像一本一個人搬不動的厚書，拆成三冊、三個人一起搬。</p>
+  </section>
+
+  <section class="slide" data-sec="14">
+    <div class="eye">Architecture</div>
+    <h2 style="margin-bottom:24px">架構</h2>
+    <svg viewBox="0 0 1640 640" width="1640" height="640">
+      <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#9a9aa2"/></marker></defs>
+      <rect x="0" y="240" width="320" height="170" rx="24" fill="#1c1c1f" stroke="#2a2a2e" stroke-width="2"/>
+      <text x="160" y="300" text-anchor="middle" fill="#ededed" font-size="36" font-weight="700">你的程式</text>
+      <text x="160" y="345" text-anchor="middle" fill="#9a9aa2" font-size="26">PyCharm · Colab</text>
+      <text x="160" y="380" text-anchor="middle" fill="#9a9aa2" font-size="26">Python openai</text>
+      <line x1="328" y1="325" x2="410" y2="325" stroke="#9a9aa2" stroke-width="4" marker-end="url(#a)"/>
+      <rect x="420" y="225" width="330" height="200" rx="24" fill="#1c1c1f" stroke="#ffc300" stroke-width="3"/>
+      <text x="585" y="288" text-anchor="middle" fill="#ffc300" font-size="36" font-weight="700">API 閘道</text>
+      <text x="585" y="333" text-anchor="middle" fill="#ededed" font-size="26" font-family="JetBrains Mono, monospace">:8080/v1</text>
+      <text x="585" y="373" text-anchor="middle" fill="#9a9aa2" font-size="26">驗證 key · 限流</text>
+      <line x1="758" y1="325" x2="880" y2="325" stroke="#9a9aa2" stroke-width="4" marker-end="url(#a)"/>
+      <g stroke="#ffc300" stroke-width="5" stroke-dasharray="3 12" stroke-linecap="round">
+        <line x1="1090" y1="110" x2="1400" y2="110"/><line x1="1020" y1="180" x2="1180" y2="470"/><line x1="1470" y1="180" x2="1310" y2="470"/>
+      </g>
+      <text x="1245" y="22" text-anchor="middle" fill="#ffc300" font-size="24" font-family="JetBrains Mono, monospace">Thunderbolt 5 · RDMA · 80 Gb/s</text>
+      <g>
+        <rect x="890" y="40" width="210" height="150" rx="20" fill="#141416" stroke="#3a3a40" stroke-width="2"/>
+        <text x="995" y="92" text-anchor="middle" fill="#ededed" font-size="34" font-weight="700">Exo-03</text>
+        <text x="995" y="132" text-anchor="middle" fill="#9a9aa2" font-size="26">48 GB</text>
+        <text x="995" y="170" text-anchor="middle" fill="#ffc300" font-size="26" font-family="JetBrains Mono, monospace">層 0–10</text>
+        <rect x="1390" y="40" width="210" height="150" rx="20" fill="#141416" stroke="#3a3a40" stroke-width="2"/>
+        <text x="1495" y="92" text-anchor="middle" fill="#ededed" font-size="34" font-weight="700">Exo-02</text>
+        <text x="1495" y="132" text-anchor="middle" fill="#9a9aa2" font-size="26">48 GB</text>
+        <text x="1495" y="170" text-anchor="middle" fill="#ffc300" font-size="26" font-family="JetBrains Mono, monospace">層 10–20</text>
+        <rect x="1140" y="460" width="210" height="150" rx="20" fill="#141416" stroke="#3a3a40" stroke-width="2"/>
+        <text x="1245" y="512" text-anchor="middle" fill="#ededed" font-size="34" font-weight="700">Exo-01</text>
+        <text x="1245" y="552" text-anchor="middle" fill="#9a9aa2" font-size="26">64 GB</text>
+        <text x="1245" y="590" text-anchor="middle" fill="#ffc300" font-size="26" font-family="JetBrains Mono, monospace">層 20–36</text>
+      </g>
+    </svg>
+  </section>
+
+  <section class="slide" data-sec="12">
+    <div class="eye">Why a cluster?</div>
+    <h2>一台<span class="y">放不下</span>，三台<span class="y">跑得動</span></h2>
+    <div class="row c3">
+      <div class="box stat"><div class="v">63<small>GB</small></div><div class="d">gpt-oss-120b<br>模型本身的大小</div></div>
+      <div class="box stat"><div class="v">48–64<small>GB</small></div><div class="d">每台 Mac mini 的記憶體<br>單獨一台裝不下</div></div>
+      <div class="box stat"><div class="v">160<small>GB</small></div><div class="d">三台合起來的記憶體<br>綽綽有餘</div></div>
+    </div>
+  </section>
+
+  <section class="slide" data-sec="12">
+    <div class="eye">Benchmarks</div>
+    <h2>實測速度</h2>
+    <div class="row c4">
+      <div class="box stat"><div class="v">30<small>tok/s</small></div><div class="d">生成回答的速度<br>比人閱讀還快</div></div>
+      <div class="box stat"><div class="v">314<small>tok/s</small></div><div class="d">讀進你的問題<br>的速度</div></div>
+      <div class="box stat"><div class="v">5×</div><div class="d">比 700 億參數的<br>Llama 3.3 單機還快</div></div>
+      <div class="box stat"><div class="v">116<small>W</small></div><div class="d">三台合計耗電</div></div>
+    </div>
+    <p class="sub">秘密在於「混合專家」（MoE）架構：1200 億參數中，每產生一個字只用到約 50 億。</p>
+  </section>
+
+  <section class="slide" data-sec="13">
+    <div class="eye">Why on campus?</div>
+    <h2>為什麼要在校內架 AI？</h2>
+    <div class="row c2">
+      <div class="box"><div class="k">01</div><h3>免費，不怕燒錢</h3><p>雲端 AI 依用量計費，迴圈寫錯一晚就能燒掉幾千元。這裡練習一毛都不用花。</p></div>
+      <div class="box"><div class="k">02</div><h3>資料不離開學校</h3><p>你送出的內容只在這三台電腦間處理，不會傳到任何雲端公司。</p></div>
+      <div class="box"><div class="k">03</div><h3>學的是業界標準</h3><p>和 ChatGPT API 一模一樣的寫法。學會了，換成任何雲端服務只要改一行網址。</p></div>
+      <div class="box"><div class="k">04</div><h3>看得見的 AI</h3><p>模型就在你眼前運作。分層、記憶體、網路、耗電都能觀察，甚至拿來當科展題目。</p></div>
+    </div>
+  </section>
+
+  <section class="slide" data-sec="13">
+    <div class="eye">For your project</div>
+    <h2>你的專題可以用它做什麼？</h2>
+    <div class="row c3">
+      <div class="box"><div class="k">寫程式</div><h3>程式助教</h3><p>在 PyCharm 裡解釋錯誤、改寫程式、產生測試資料。</p></div>
+      <div class="box"><div class="k">做應用</div><h3>AI 功能</h3><p>聊天機器人、自動出題、作文回饋、會說話的遊戲 NPC。</p></div>
+      <div class="box"><div class="k">RAG</div><h3>讀你的資料</h3><p>把校規、課本、籤詩做成「只根據資料回答」的問答系統。</p></div>
+      <div class="box"><div class="k">Agent</div><h3>會用工具的 AI</h3><p>讓 AI 自己決定什麼時候呼叫你寫的 Python 函式。</p></div>
+      <div class="box"><div class="k">科展</div><h3>研究叢集本身</h3><p>分散式運算、量化、耗能、多人排隊，都是少見的題目。</p></div>
+      <div class="box"><div class="k">JSON</div><h3>結構化輸出</h3><p>讓 AI 輸出程式能直接讀取的資料格式。</p></div>
+    </div>
+  </section>
+
+  <section class="slide" data-sec="13">
+    <div class="eye">Vibe Coding</div>
+    <h2>用 AI 一起寫 Python 的節奏</h2>
+    <div class="flow">
+      <div class="st"><span class="n">1</span><h3>描述</h3><p>輸入、輸出、限制<br>說清楚</p></div><div class="ar">→</div>
+      <div class="st"><span class="n">2</span><h3>產生</h3><p>一次只做<br>一個小功能</p></div><div class="ar">→</div>
+      <div class="st"><span class="n">3</span><h3>執行</h3><p>用自己的資料<br>真的跑跑看</p></div><div class="ar">→</div>
+      <div class="st"><span class="n">4</span><h3>讀錯誤</h3><p>問「為什麼」<br>不只是「幫我修」</p></div><div class="ar">→</div>
+      <div class="st"><span class="n">5</span><h3>弄懂</h3><p>看懂每一行<br>再往下做</p></div>
+    </div>
+    <p class="sub">AI 會出錯，而且出錯時語氣一樣很有自信。程式一定要自己測試。</p>
+  </section>
+
+  <section class="slide" data-sec="15">
+    <div class="eye">Python</div>
+    <h2>幾行 Python 就能用</h2>
+<pre><span class="k">from</span> openai <span class="k">import</span> OpenAI
+
+client = OpenAI(base_url=<span class="s">"http://192.168.16.131:8080/v1"</span>,
+                api_key=<span class="s">"你的API key"</span>)
+
+r = client.chat.completions.create(
+    model=<span class="s">"gpt-oss-120b"</span>,
+    messages=[{<span class="s">"role"</span>: <span class="s">"user"</span>, <span class="s">"content"</span>: <span class="s">"用一句話介紹 Python"</span>}])
+print(r.choices[0].message.content)</pre>
+  </section>
+
+  <section class="slide" data-sec="12">
+    <div class="eye">Rules</div>
+    <h2>使用規則</h2>
+    <ul class="rules">
+      <li><span>01</span><div>API key 就是密碼 <em>不分享、不上傳 GitHub</em></div></li>
+      <li><span>02</span><div>用在學習與專題 <em>這是學校的教學設備</em></div></li>
+      <li><span>03</span><div>共用資源，互相禮讓 <em>同時最多約 6 組，大量資料請放慢</em></div></li>
+      <li><span>04</span><div>誠實標示 AI 協助 <em>說明你自己做了哪些判斷</em></div></li>
+    </ul>
+  </section>
+
+  <section class="slide" data-sec="18">
+    <div class="glow"></div>
+    <div class="cta">
+      <div>
+        <div class="eye">Get started</div>
+        <h2>掃描 QR code<br>開始使用</h2>
+        <p class="big">設定教學、範例程式、PyCharm 與 Colab 說明都在這裡：</p>
+        <div class="url">letranger.github.io/exo-llm</div>
+        <p class="big"><b>API key</b>：請向<b class="y">資訊老師</b>申請（以小組為單位）</p>
+      </div>
+      <div class="qr"><img src="assets/qr.svg" alt="QR code：letranger.github.io/exo-llm"></div>
+    </div>
+  </section>
+
+  <div id="foot">EXO-LLM @ TNFSH</div>
+  <div id="dots"></div>
+  <div id="bar"></div>
+</div>
+<script>
+const stage = document.getElementById("stage");
+const slides = [...document.querySelectorAll(".slide")];
+const bar = document.getElementById("bar"), dots = document.getElementById("dots");
+slides.forEach(() => dots.appendChild(document.createElement("i")));
+let i = 0, timer = null, paused = false;
+
+function fit() {
+  const s = Math.min(innerWidth / 1920, innerHeight / 1080);
+  stage.style.transform = `translate(-50%, -50%) scale(${s})`;
+}
+addEventListener("resize", fit); fit();
+
+function show(n) {
+  slides[i].classList.remove("on"); dots.children[i].classList.remove("on");
+  i = (n + slides.length) % slides.length;
+  slides[i].classList.add("on"); dots.children[i].classList.add("on");
+  const sec = +(slides[i].dataset.sec || 12);
+  bar.style.transition = "none"; bar.style.width = "0";
+  void bar.offsetWidth;
+  if (!paused) { bar.style.transition = `width ${sec}s linear`; bar.style.width = "100%"; }
+  clearTimeout(timer);
+  if (!paused) timer = setTimeout(() => show(i + 1), sec * 1000);
+}
+show(0);
+
+addEventListener("keydown", (e) => {
+  if (e.key === "ArrowRight" || e.key === "PageDown") show(i + 1);
+  else if (e.key === "ArrowLeft" || e.key === "PageUp") show(i - 1);
+  else if (e.key === " ") { paused = !paused; show(i); }
+  else if (e.key === "f" || e.key === "F") document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
+});
+addEventListener("click", () => document.documentElement.requestFullscreen?.().catch(() => {}));
+
+// 游標閒置 3 秒自動隱藏
+let idle;
+addEventListener("mousemove", () => { document.body.classList.remove("idle"); clearTimeout(idle); idle = setTimeout(() => document.body.classList.add("idle"), 3000); });
+
+// 防止螢幕休眠（支援的瀏覽器）
+async function keepAwake() { try { await navigator.wakeLock?.request("screen"); } catch {} }
+keepAwake(); document.addEventListener("visibilitychange", () => document.visibilityState === "visible" && keepAwake());
+
+// 每 6 小時重新載入，網站更新後輪播也會跟著更新
+setTimeout(() => location.reload(), 6 * 3600 * 1000);
+</script>
+</body>
+</html>

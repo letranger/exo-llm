@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Google Colab · EXO-LLM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<nav class="nav"><div class="nav-in">
+  <a class="brand" href="index.html"><b>EXO</b>-LLM @ TNFSH</a>
+  <a class="l" href="index.html">認識叢集</a>
+  <a class="l" href="start.html">快速開始</a>
+  <a class="l" href="pycharm.html">PyCharm</a>
+  <a class="l" href="colab.html">Colab</a>
+  <a class="l" href="vibe.html">Vibe Coding 與專題</a>
+  <a class="l" href="faq.html">規則與 FAQ</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="eyebrow">Google Colab</div>
+  <h1>在 Colab 裡使用校內 LLM</h1>
+  <p class="lead">Colab 的程式不是在你的電腦上執行，而是在 Google 的雲端主機上。雲端主機連不到校內網路的 <code>192.168.16.131</code>，所以 Colab 要改用另一個網址。</p>
+
+  <div class="warn" id="pending"><b>Colab 專用網址開通中。</b> 老師正在設定校外連線用的網址，開通後會更新這一頁。在那之前，請先用 <a href="pycharm.html">PyCharm</a> 或電腦上的 Python 練習。</div>
+
+  <h2>為什麼網址不一樣？</h2>
+  <div class="tbl"><table>
+    <tr><th>你在哪裡寫程式</th><th>程式在哪裡執行</th><th>要用的網址</th></tr>
+    <tr><td>PyCharm、Thonny、終端機</td><td>你的電腦（校內網路）</td><td><code>http://192.168.16.131:8080/v1</code></td></tr>
+    <tr><td>Google Colab</td><td>Google 的雲端主機</td><td>Colab 專用網址（開通中）</td></tr>
+  </table></div>
+
+  <h2>步驟 1：把 key 存進 Colab Secrets</h2>
+  <p>Colab 有一個專門放密碼的地方，key 存在那裡，分享筆記本時別人看不到：</p>
+  <ol class="steps">
+    <li><b>打開 Secrets</b>點 Colab 左側工具列的 🔑 鑰匙圖示。</li>
+    <li><b>新增 secret</b>按「Add new secret」，Name 填 <code>EXO_API_KEY</code>，Value 貼上老師給你的 key。</li>
+    <li><b>開啟存取</b>把「Notebook access」開關打開。</li>
+  </ol>
+
+  <h2>步驟 2：安裝套件並連線</h2>
+  <pre><code>!pip install -q openai</code></pre>
+  <pre><code><span class="k">from</span> google.colab <span class="k">import</span> userdata
+<span class="k">from</span> openai <span class="k">import</span> OpenAI
+
+client = OpenAI(
+    base_url=<span class="s">"（Colab 專用網址，開通後公布）"</span>,
+    api_key=userdata.get(<span class="s">"EXO_API_KEY"</span>),
+)
+
+response = client.chat.completions.create(
+    model=<span class="s">"gpt-oss-120b"</span>,
+    messages=[{<span class="s">"role"</span>: <span class="s">"user"</span>, <span class="s">"content"</span>: <span class="s">"用一句話介紹 Colab"</span>}],
+)
+print(response.choices[0].message.content)</code></pre>
+  <p>之後的寫法和 <a href="start.html">快速開始</a>完全一樣：串流、system prompt、多輪對話、JSON 輸出都能直接用。</p>
+
+  <div class="tip"><b>分享筆記本前檢查一次。</b> 用 Secrets 存的 key 不會跟著筆記本被分享出去，但如果你曾經把 key 直接寫在程式格裡，記得刪掉，並檢查輸出結果裡有沒有印出 key。</div>
+</main>
+
+<footer><div class="wrap">國立臺南第一高級中學 資訊科 · <a href="faq.html">使用規則</a></div></footer>
+<script src="assets/site.js"></script>
+</body>
+</html>
