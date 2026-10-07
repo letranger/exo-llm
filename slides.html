@@ -54,6 +54,11 @@ pre .s{color:#ffd65c}pre .k{color:#ff9f6b}pre .c{color:#7d7d86}
 #corner .q{background:var(--accent);border-radius:16px;padding:10px;width:150px;height:150px}
 #corner .q img{width:100%;height:100%;display:block}
 #corner.hide{opacity:0}
+.hero{display:grid;grid-template-columns:1fr 720px;gap:80px;align-items:center;margin-top:90px}
+.hero h1{font-size:92px}
+.hero .big{font-size:38px}
+.pic{height:680px;border-radius:30px;overflow:hidden;border:1px solid var(--line);box-shadow:0 30px 80px rgba(0,0,0,.5)}
+.pic img{width:100%;height:100%;object-fit:cover;object-position:28% 50%;display:block}
 #bar{position:absolute;left:0;bottom:0;height:8px;background:var(--accent);width:0}
 #dots{position:absolute;right:140px;bottom:52px;display:flex;gap:14px}
 #dots i{width:14px;height:14px;border-radius:50%;background:#3a3a40}
@@ -67,11 +72,16 @@ svg text{font-family:var(--sans)}
 <body>
 <div id="stage">
 
-  <section class="slide" data-sec="11">
+  <section class="slide" data-sec="12">
     <div class="glow"></div>
-    <div class="eye">TNFSH · 校內 AI 叢集</div>
-    <h1>三台 Mac mini，<br>串成一顆 <span class="y">1200 億參數</span>的大腦</h1>
-    <p class="big">這就是你眼前的 <b>EXO-LLM</b>：一台放不下的大型語言模型，三台一起跑。<br>Python 課程與 AI 專題，免費使用。</p>
+    <div class="hero">
+      <div>
+        <div class="eye">TNFSH · 校內 AI 叢集</div>
+        <h1>三台 Mac mini，<br>串成一顆<br><span class="y">1200 億參數</span>的大腦</h1>
+        <p class="big">這就是你眼前的 <b>EXO-LLM</b>：一台放不下的大型語言模型，三台一起跑。Python 課程與 AI 專題，免費使用。</p>
+      </div>
+      <div class="pic"><img src="assets/exo-cluster-slide.jpg" alt="三台疊在一起的 Mac mini"></div>
+    </div>
   </section>
 
   <section class="slide" data-sec="13">

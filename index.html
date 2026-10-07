@@ -30,6 +30,11 @@
     <a class="btn ghost" href="vibe.html">看看能做什麼專題</a>
   </p>
 
+  <figure class="photo">
+    <img src="assets/exo-cluster.jpg" width="1800" height="1200" alt="三台銀色 Mac mini 疊在一起，前方電源燈亮著，後方是顯示器與鍵盤">
+    <figcaption>放在資訊教室裡的 EXO 叢集：三台 Mac mini（M4 Pro）疊在一起，背面用 Thunderbolt 線兩兩相連。</figcaption>
+  </figure>
+
   <h2>什麼是 EXO？</h2>
   <p><b>EXO</b> 是一套開源的「分散式推論」軟體：它把一個大型語言模型（LLM）切成好幾段，分給好幾台電腦一起算。就像一本太厚、一個人搬不動的書，拆成三冊由三個人一起搬。</p>
   <p>大型語言模型的參數必須全部放進記憶體才能運作。gpt-oss-120b 有 1200 億個參數，壓縮後約 63 GB；我們每台 Mac mini 只有 48～64 GB 記憶體，單台放不下。EXO 把模型的 36 層切成三段，每台負責一段，再用 Thunderbolt 線把運算結果接力傳下去。</p>
