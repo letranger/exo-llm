@@ -17,6 +17,7 @@
   <a class="l" href="pycharm.html">PyCharm</a>
   <a class="l" href="colab.html">Colab 與 Jupyter</a>
   <a class="l" href="vibe.html">Vibe Coding 與專題</a>
+  <a class="l" href="exambot.html">實作範例</a>
   <a class="l" href="faq.html">規則與 FAQ</a>
 </div></nav>
 
@@ -92,6 +93,7 @@ chunks = [p.strip() <span class="k">for</span> p <span class="k">in</span> text.
 print(ask(<span class="s">"圖書館的書可以借多久？"</span>))
 print(ask(<span class="s">"學校有游泳池嗎？"</span>))   <span class="c"># 資料裡沒有 → 應回答「資料中沒有提到」</span></code></pre>
   <div class="tip"><b>進階挑戰：</b> 把第 2 步換成「向量搜尋」（embedding），讓「借書期限」和「書可以借多久」這種用字不同但意思相同的問題也找得到。這就是專題可以深入比較的地方。</div>
+  <p>想看一個「即時從網路抓資料、再交給 AI 整理」的完整網站範例？見 <a href="exambot.html">實作範例：考試小幫手</a>。</p>
 
   <h2 id="agent">Agent：讓 AI 會使用工具</h2>
   <p>gpt-oss 支援「工具呼叫」（function calling）：你告訴它有哪些 Python 函式可以用，它會自己決定什麼時候呼叫、要帶什麼參數。這是 AI Agent 的基礎。</p>

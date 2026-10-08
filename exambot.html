@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>實作範例：考試小幫手 · EXO-LLM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<nav class="nav"><div class="nav-in">
+  <a class="brand" href="index.html"><b>EXO</b>-LLM @ TNFSH</a>
+  <a class="l" href="index.html">認識叢集</a>
+  <a class="l" href="start.html">快速開始</a>
+  <a class="l" href="pycharm.html">PyCharm</a>
+  <a class="l" href="colab.html">Colab 與 Jupyter</a>
+  <a class="l" href="vibe.html">Vibe Coding 與專題</a>
+  <a class="l" href="exambot.html">實作範例</a>
+  <a class="l" href="faq.html">規則與 FAQ</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="eyebrow">Example Project</div>
+  <h1>做一個「考試小幫手」網站</h1>
+  <p class="lead">問它「最近學校有什麼重要考試？」，它會先去抓學校官網的<b>考試資訊</b>公告，再交給校內 AI 整理成清單。這是 <a href="vibe.html#rag">RAG</a> 的真實版本：資料不是事先存好的檔案，而是每次即時從網路上抓。整個網站只有一個 Python 檔，大約 70 行。</p>
+
+  <div class="tip"><b>先玩玩看：</b> 老師已經架好一個，在校內打開 <a href="http://192.168.16.233:8501">http://192.168.16.233:8501</a> 就能用。<b>只能在校內網路使用</b>，在家或用手機行動網路連不到。</div>
+
+  <h2>它怎麼運作</h2>
+  <ol class="steps">
+    <li><b>抓列表</b>用 <code>requests</code> 下載官網「考試資訊」頁，用 <code>BeautifulSoup</code> 找出每則公告的標題、日期、連結。</li>
+    <li><b>抓內文</b>再進入前 8 則公告的內頁，抓出內文（例如「第二次模擬考考試日期為10月28日～29日」）。</li>
+    <li><b>交給 AI</b>把公告、<b>今天的日期</b>和問題一起送給 gpt-oss-120b，要求它只根據公告回答。</li>
+    <li><b>顯示</b>用 Streamlit 做成網頁：一個輸入框、一個按鈕，再把 AI 的回答顯示出來。</li>
+  </ol>
+  <div class="tip"><b>為什麼要給它今天的日期？</b> AI 不知道今天是幾號。不告訴它，它就分不出哪些考試「已經考完」、哪些是「最近」。</div>
+
+  <h2>步驟 1：準備檔案</h2>
+  <p>建立一個資料夾，裡面的檔案長這樣（完整檔案在 <a href="https://github.com/letranger/exo-llm/tree/main/examples/exam_bot">GitHub 的 examples/exam_bot</a>）：</p>
+  <pre><code>exam_bot/
+├── app.py                  <span class="c"># 主程式</span>
+├── requirements.txt        <span class="c"># 要安裝的套件</span>
+└── .streamlit/
+    └── secrets.toml        <span class="c"># 你的 API key（不能上傳！）</span></code></pre>
+  <p>安裝套件：</p>
+  <pre><code>pip install streamlit openai beautifulsoup4</code></pre>
+
+  <h2 id="key">步驟 2：把 API key 存成檔案</h2>
+  <p>key 向資訊老師申請，一人一把（見 <a href="faq.html">規則與 FAQ</a>）。拿到之後，<b>不要寫在程式裡</b>，而是存在 <code>.streamlit/secrets.toml</code> 這個檔案：</p>
+  <div class="file">.streamlit/secrets.toml</div>
+  <pre><code>EXO_API_KEY = <span class="s">"sk-你的API key"</span></code></pre>
+  <p>程式裡用 <code>st.secrets["EXO_API_KEY"]</code> 就讀得到，這是 Streamlit 內建的功能，不用自己寫讀檔程式，也不用設環境變數。</p>
+  <div class="warn"><b>這個檔案就是你的密碼。</b> 用 git 的話，一定要在 <code>.gitignore</code> 加一行 <code>.streamlit/secrets.toml</code>，它才不會被上傳到 GitHub。交作業、傳檔案給同學時也要把它排除。外流的 key 老師會直接停用。</div>
+
+  <div class="tbl"><table>
+    <tr><th>存 key 的方法</th><th>優點</th><th>要注意</th></tr>
+    <tr><td>寫死在程式裡</td><td>最簡單</td><td>程式一分享 key 就外流，只適合自己練習</td></tr>
+    <tr><td>環境變數（<a href="pycharm.html">PyCharm 設定</a>）</td><td>程式碼裡完全沒有 key</td><td>每台電腦、每個執行設定都要設一次</td></tr>
+    <tr><td>存成檔案（本頁）</td><td>直覺，和程式放在一起好管理</td><td>一定要加進 <code>.gitignore</code></td></tr>
+  </table></div>
+
+  <h2>步驟 3：主程式</h2>
+  <div class="file">app.py</div>
+  <pre><code><span class="s">"""南一中考試小幫手：抓學校官網「考試資訊」，交給校內 LLM 整理後回答。
+
+執行：streamlit run app.py
+"""</span>
+<span class="k">import</span> datetime
+
+<span class="k">import</span> requests
+<span class="k">import</span> streamlit <span class="k">as</span> st
+<span class="k">from</span> bs4 <span class="k">import</span> BeautifulSoup
+<span class="k">from</span> openai <span class="k">import</span> OpenAI
+
+BASE = <span class="s">"https://www.tnfsh.tn.edu.tw/latestevent/"</span>
+LIST_URL = BASE + <span class="s">"index.aspx?Parser=9,3,17"</span>  <span class="c"># 官網「考試資訊」列表</span>
+
+<span class="c"># key 從 .streamlit/secrets.toml 讀，不寫在程式裡</span>
+client = OpenAI(
+    base_url=<span class="s">"http://192.168.16.233:4000/v1"</span>,
+    api_key=st.secrets[<span class="s">"EXO_API_KEY"</span>],
+)
+
+
+<span class="k">def</span> get_soup(url):
+    html = requests.get(url, timeout=15).text
+    <span class="k">return</span> BeautifulSoup(html, <span class="s">"html.parser"</span>)
+
+
+@st.cache_data(ttl=600)  <span class="c"># 10 分鐘內重複提問不重抓，對學校網站友善</span>
+<span class="k">def</span> fetch_exams(n=8):
+    <span class="s">"""抓列表頁前 n 則公告，再進內頁抓內文，整理成一段純文字。"""</span>
+    items = []
+    <span class="k">for</span> li <span class="k">in</span> get_soup(LIST_URL).select(<span class="s">"ul.list li"</span>)[1:n + 1]:  <span class="c"># 第一個 li 是表頭</span>
+        a = li.find(<span class="s">"a"</span>)
+        unit, date = [s.get_text(strip=<span class="k">True</span>) <span class="k">for</span> s <span class="k">in</span> li.select(<span class="s">"span.w15"</span>)]
+        link = BASE + a[<span class="s">"href"</span>]
+
+        <span class="c"># 內頁的內文在「公布單位」和「您的瀏覽器，不支援script」之間</span>
+        text = get_soup(link).get_text(<span class="s">" "</span>, strip=<span class="k">True</span>)
+        body = text.split(<span class="s">"公布單位"</span>)[-1].split(<span class="s">"您的瀏覽器"</span>)[0].lstrip(<span class="s">" ："</span>)[:500]
+
+        items.append(<span class="s">f"標題：{a['title']}\n公布日期：{date}（{unit}）\n內文：{body}\n連結：{link}"</span>)
+    <span class="k">return</span> <span class="s">"\n\n"</span>.join(items)
+
+
+<span class="k">def</span> ask(question, data):
+    system = (
+        <span class="s">f"你是臺南一中的校園小幫手。今天是 {datetime.date.today()}。"</span>
+        <span class="s">"只根據提供的公告回答，用繁體中文條列近期的考試或報名截止：日期、對象、重點。"</span>
+        <span class="s">"已經過去的不要列；公告沒寫日期的就說「詳見附件」；公告沒寫的（例如對象）不要猜，資料裡沒有的不要自己編。"</span>
+        <span class="s">"每一項最後附上公告連結。"</span>
+    )
+    response = client.chat.completions.create(
+        model=<span class="s">"gpt-oss-120b"</span>,
+        messages=[
+            {<span class="s">"role"</span>: <span class="s">"system"</span>, <span class="s">"content"</span>: system},
+            {<span class="s">"role"</span>: <span class="s">"user"</span>, <span class="s">"content"</span>: <span class="s">f"公告：\n{data}\n\n問題：{question}"</span>},
+        ],
+        reasoning_effort=<span class="s">"low"</span>,
+    )
+    <span class="k">return</span> response.choices[0].message.content
+
+
+st.title(<span class="s">"南一中考試小幫手"</span>)
+st.caption(<span class="s">"⚠️ 只能在校內網路使用（AI 在校內的叢集上），回答僅供參考，請以學校公告為準。"</span>)
+question = st.text_input(<span class="s">"想問什麼？"</span>, <span class="s">"最近學校有什麼重要考試？"</span>)
+
+<span class="k">if</span> st.button(<span class="s">"問問看"</span>):
+    <span class="k">with</span> st.spinner(<span class="s">"抓取學校公告中…"</span>):
+        data = fetch_exams()
+    <span class="k">with</span> st.expander(<span class="s">"抓到的原始公告（這就是交給 AI 的資料）"</span>):
+        st.text(data)
+    <span class="k">with</span> st.spinner(<span class="s">"AI 整理中…"</span>):
+        st.markdown(ask(question, data))</code></pre>
+
+  <h3>幾個重點</h3>
+  <ul>
+    <li><code>@st.cache_data(ttl=600)</code>：10 分鐘內再問，就直接用上次抓到的資料，不會一直打學校網站。寫爬蟲要對別人的網站有禮貌。</li>
+    <li><code>select("ul.list li")</code>：在瀏覽器對公告列表按右鍵 →「檢查」，就看得到每則公告是一個 <code>&lt;li&gt;</code>。寫爬蟲的第一步永遠是先看網頁原始碼長什麼樣子。</li>
+    <li><code>st.expander</code>：把交給 AI 的原始資料也秀出來。回答怪怪的時候，先看資料有沒有抓對。</li>
+    <li>不設 <code>max_tokens</code>，用 <code>reasoning_effort="low"</code> 讓它回答快一點（原因見 <a href="start.html">快速開始</a>）。</li>
+  </ul>
+
+  <h2>步驟 4：執行</h2>
+  <pre><code>streamlit run app.py</code></pre>
+  <p>瀏覽器會自動打開 <code>http://localhost:8501</code>，按「問問看」。抓資料不到 1 秒，AI 整理大約 30～60 秒（叢集忙的時候會更久）。要在校內網路才連得到叢集。</p>
+
+  <div class="warn"><b>AI 還是可能「補腦」。</b> 我們實測時，就算 system prompt 寫了「公告沒寫的不要猜」，它有時仍會把第二次模擬考的對象寫成「全校學生」，但公告裡根本沒寫對象。所以這種工具要附上公告連結，重要的事一定要點進去看原始公告。</div>
+
+  <h2>進階挑戰</h2>
+  <ul>
+    <li>有些考試的時間只寫在附件 PDF 裡。試著用 <code>pypdf</code> 把附件的文字也抓下來交給 AI，比較回答有沒有變準。</li>
+    <li>把「最新消息」（<code>Parser=9,3,19</code>）也抓進來，變成「校園公告小幫手」。</li>
+    <li>加上 <code>stream=True</code>，讓回答一個字一個字出現（Streamlit 有 <code>st.write_stream</code>）。</li>
+    <li>比較「給今天日期」和「不給日期」時，AI 的回答差在哪裡，這就是一個小研究。</li>
+  </ul>
+</main>
+
+<footer><div class="wrap">國立臺南第一高級中學 資訊科 · <a href="faq.html">使用規則</a></div></footer>
+<script src="assets/site.js"></script>
+</body>
+</html>

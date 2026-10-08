@@ -48,6 +48,12 @@ pre .s{color:#ffd65c}pre .k{color:#ff9f6b}pre .c{color:#7d7d86}
 .qr{background:var(--accent);border-radius:30px;padding:26px}
 .qr img{width:100%;display:block}
 .url{font:700 54px/1.3 var(--mono);color:var(--accent);margin:26px 0 40px;word-break:break-all}
+.try{display:grid;grid-template-columns:1fr 780px;gap:80px;align-items:center}
+.qrs{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+.qrs figure{margin:0;text-align:center}
+.qrs .qr{padding:20px}
+.qrs figcaption{font:500 24px/1.45 var(--mono);color:var(--muted);margin-top:22px}
+.qrs figcaption b{display:block;color:var(--text);font:700 34px/1.4 var(--sans)}
 #corner{position:absolute;top:56px;right:72px;display:flex;align-items:center;gap:20px;transition:opacity .6s ease;z-index:5}
 #corner .t{font:500 22px/1.45 var(--mono);color:var(--muted);text-align:right}
 #corner .t b{display:block;color:var(--text);font:700 24px/1.4 var(--sans)}
@@ -198,6 +204,22 @@ r = client.chat.completions.create(
     model=<span class="s">"gpt-oss-120b"</span>,
     messages=[{<span class="s">"role"</span>: <span class="s">"user"</span>, <span class="s">"content"</span>: <span class="s">"用一句話介紹 Python"</span>}])
 print(r.choices[0].message.content)</pre>
+  </section>
+
+  <section class="slide" data-sec="18">
+    <div class="glow"></div>
+    <div class="try">
+      <div>
+        <div class="eye">Try it · 實作範例</div>
+        <h2>問它：「最近學校有<br><span class="y">什麼重要考試？</span>」</h2>
+        <p class="big"><b>考試小幫手</b>會先抓學校官網的「考試資訊」，再交給校內 AI 整理成清單。這就是 RAG：<b>先找資料，再讓 AI 回答</b>。</p>
+        <p class="sub">⚠ 只能在校內網路使用（行動網路連不到）</p>
+      </div>
+      <div class="qrs">
+        <figure><div class="qr"><img src="assets/qr-exambot-app.svg" alt="QR code：192.168.16.233:8501"></div><figcaption><b>掃我試用</b>192.168.16.233:8501</figcaption></figure>
+        <figure><div class="qr"><img src="assets/qr-exambot.svg" alt="QR code：考試小幫手教學頁"></div><figcaption><b>掃我學怎麼做</b>網站「實作範例」</figcaption></figure>
+      </div>
+    </div>
   </section>
 
   <section class="slide" data-sec="12">

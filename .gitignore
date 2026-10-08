@@ -1,1 +1,6 @@
 assets/DSC*.JPG
+.DS_Store
+# API key 檔，不能進 git
+**/.streamlit/secrets.toml
+__pycache__/
+.venv/
