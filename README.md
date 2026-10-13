@@ -1,6 +1,6 @@
 # EXO-LLM @ TNFSH
 
-臺南一中校內 AI 叢集的介紹與教學網站：三台 Mac mini 以 [EXO](https://github.com/exo-explore/exo) 串接，透過 Thunderbolt RDMA 分散執行 OpenAI 開源模型 gpt-oss-120b，提供學生 Python 與 AI 專題使用。
+臺南一中校內 AI 叢集的介紹與教學網站：三台 Mac mini 以 [EXO](https://github.com/exo-explore/exo) 串接，透過 Thunderbolt RDMA 分散執行開源模型 Qwen3.5-122B-A10B（6bit，可看圖；2026-10-13 前為 gpt-oss-120b），提供學生 Python 與 AI 專題使用。
 
 - 網站：https://letranger.github.io/exo-llm/
 - 輪播投影片（教室展示用）：https://letranger.github.io/exo-llm/slides.html
