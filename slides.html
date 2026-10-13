@@ -83,7 +83,7 @@ svg text{font-family:var(--sans)}
     <div class="hero">
       <div>
         <div class="eye">TNFSH · 校內 AI 叢集</div>
-        <h1>三台 Mac mini，<br>串成一顆<br><span class="y">1220 億參數</span>的大腦</h1>
+        <h1>三台 Mac mini，<br>串成一顆<br><span class="y">1200 億參數</span>的大腦</h1>
         <p class="big">這就是你眼前的 <b>EXO-LLM</b>：一台放不下的大型語言模型，三台一起跑。Python 課程與 AI 專題，免費使用。</p>
       </div>
       <div class="pic"><img src="assets/exo-cluster-slide.jpg" alt="三台疊在一起的 Mac mini"></div>
@@ -93,7 +93,7 @@ svg text{font-family:var(--sans)}
   <section class="slide" data-sec="13">
     <div class="eye">What is EXO?</div>
     <h2>把一個太大的 AI，<span class="y">切開來</span>一起算</h2>
-    <p class="big"><b>EXO</b> 是開源的「分散式推論」軟體。它把大型語言模型的 48 層切成三段，每台 Mac mini 負責一段，算完就透過 Thunderbolt 線把結果<b>接力</b>傳給下一台。</p>
+    <p class="big"><b>EXO</b> 是開源的「分散式推論」軟體。它把大型語言模型的 36 層切成三段，每台 Mac mini 負責一段，算完就透過 Thunderbolt 線把結果<b>接力</b>傳給下一台。</p>
     <p class="sub">就像一本一個人搬不動的厚書，拆成三冊、三個人一起搬。</p>
   </section>
 
@@ -120,15 +120,15 @@ svg text{font-family:var(--sans)}
         <rect x="890" y="40" width="210" height="150" rx="20" fill="#141416" stroke="#3a3a40" stroke-width="2"/>
         <text x="995" y="92" text-anchor="middle" fill="#ededed" font-size="34" font-weight="700">Exo-03</text>
         <text x="995" y="132" text-anchor="middle" fill="#9a9aa2" font-size="26">48 GB</text>
-        <text x="995" y="170" text-anchor="middle" fill="#ffc300" font-size="26" font-family="JetBrains Mono, monospace">層 21–34</text>
+        <text x="995" y="170" text-anchor="middle" fill="#ffc300" font-size="26" font-family="JetBrains Mono, monospace">層 0–10</text>
         <rect x="1390" y="40" width="210" height="150" rx="20" fill="#141416" stroke="#3a3a40" stroke-width="2"/>
         <text x="1495" y="92" text-anchor="middle" fill="#ededed" font-size="34" font-weight="700">Exo-02</text>
         <text x="1495" y="132" text-anchor="middle" fill="#9a9aa2" font-size="26">48 GB</text>
-        <text x="1495" y="170" text-anchor="middle" fill="#ffc300" font-size="26" font-family="JetBrains Mono, monospace">層 34–48</text>
+        <text x="1495" y="170" text-anchor="middle" fill="#ffc300" font-size="26" font-family="JetBrains Mono, monospace">層 10–20</text>
         <rect x="1140" y="460" width="210" height="150" rx="20" fill="#141416" stroke="#3a3a40" stroke-width="2"/>
         <text x="1245" y="512" text-anchor="middle" fill="#ededed" font-size="34" font-weight="700">Exo-01</text>
         <text x="1245" y="552" text-anchor="middle" fill="#9a9aa2" font-size="26">64 GB</text>
-        <text x="1245" y="590" text-anchor="middle" fill="#ffc300" font-size="26" font-family="JetBrains Mono, monospace">層 0–21</text>
+        <text x="1245" y="590" text-anchor="middle" fill="#ffc300" font-size="26" font-family="JetBrains Mono, monospace">層 20–36</text>
       </g>
     </svg>
   </section>
@@ -137,9 +137,9 @@ svg text{font-family:var(--sans)}
     <div class="eye">Why a cluster?</div>
     <h2>一台<span class="y">放不下</span>，三台<span class="y">跑得動</span></h2>
     <div class="row c3">
-      <div class="box stat"><div class="v">93<small>GB</small></div><div class="d">Qwen3.5-122B<br>模型本身的大小</div></div>
+      <div class="box stat"><div class="v">63<small>GB</small></div><div class="d">gpt-oss-120b<br>模型本身的大小</div></div>
       <div class="box stat"><div class="v">48–64<small>GB</small></div><div class="d">每台 Mac mini 的記憶體<br>單獨一台裝不下</div></div>
-      <div class="box stat"><div class="v">160<small>GB</small></div><div class="d">三台合起來的記憶體<br>剛好放得下</div></div>
+      <div class="box stat"><div class="v">160<small>GB</small></div><div class="d">三台合起來的記憶體<br>綽綽有餘</div></div>
     </div>
   </section>
 
@@ -147,12 +147,12 @@ svg text{font-family:var(--sans)}
     <div class="eye">Benchmarks</div>
     <h2>實測速度</h2>
     <div class="row c4">
-      <div class="box stat"><div class="v">15<small>tok/s</small></div><div class="d">生成回答的速度<br>約和人閱讀一樣快</div></div>
-      <div class="box stat"><div class="v">~6<small>秒</small></div><div class="d">送出問題到<br>開始回答</div></div>
-      <div class="box stat"><div class="v">2.6×</div><div class="d">比 700 億參數的<br>Llama 3.3 單機還快</div></div>
-      <div class="box stat"><div class="v">看圖</div><div class="d">照片、截圖、圖表<br>都看得懂</div></div>
+      <div class="box stat"><div class="v">30<small>tok/s</small></div><div class="d">生成回答的速度<br>比人閱讀還快</div></div>
+      <div class="box stat"><div class="v">314<small>tok/s</small></div><div class="d">讀進你的問題<br>的速度</div></div>
+      <div class="box stat"><div class="v">5×</div><div class="d">比 700 億參數的<br>Llama 3.3 單機還快</div></div>
+      <div class="box stat"><div class="v">116<small>W</small></div><div class="d">三台合計耗電</div></div>
     </div>
-    <p class="sub">秘密在於「混合專家」（MoE）架構：1220 億參數中，每產生一個字只用到約 100 億。</p>
+    <p class="sub">秘密在於「混合專家」（MoE）架構：1200 億參數中，每產生一個字只用到約 50 億。</p>
   </section>
 
   <section class="slide" data-sec="13">
@@ -201,7 +201,7 @@ client = OpenAI(base_url=<span class="s">"http://192.168.16.233:4000/v1"</span>,
                 api_key=<span class="s">"你的API key"</span>)
 
 r = client.chat.completions.create(
-    model=<span class="s">"qwen3.5-122b"</span>,
+    model=<span class="s">"gpt-oss-120b"</span>,
     messages=[{<span class="s">"role"</span>: <span class="s">"user"</span>, <span class="s">"content"</span>: <span class="s">"用一句話介紹 Python"</span>}])
 print(r.choices[0].message.content)</pre>
   </section>

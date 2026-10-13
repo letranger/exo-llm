@@ -56,9 +56,9 @@
 version: 1.0.0
 schema: v1
 models:
-  - name: Qwen3.5-122B（校內）
+  - name: gpt-oss-120b（校內）
     provider: openai
-    model: qwen3.5-122b
+    model: gpt-oss-120b
     apiBase: http://192.168.16.233:4000/v1
     apiKey: 你的API key
     roles:
@@ -67,11 +67,11 @@ models:
       - apply</code></pre>
 
   <ol class="steps" start="4" style="counter-reset: s 3">
-    <li><b>選擇模型</b>回到 Continue 聊天面板，在模型下拉選單選「Qwen3.5-122B（校內）」。</li>
+    <li><b>選擇模型</b>回到 Continue 聊天面板，在模型下拉選單選「gpt-oss-120b（校內）」。</li>
     <li><b>試試看</b>在程式裡選取一段程式碼，按 <code>Cmd/Ctrl + J</code> 把它加進聊天，問「這段程式在做什麼？」。</li>
   </ol>
 
-  <div class="warn"><b>不要開「自動補全」（autocomplete）。</b> 上面的設定刻意沒有 <code>autocomplete</code> 角色。自動補全每打幾個字就會送一次請求，會大量佔用叢集，拖慢所有人的速度，而且 122B 這種大模型做自動補全也太慢。</div>
+  <div class="warn"><b>不要開「自動補全」（autocomplete）。</b> 上面的設定刻意沒有 <code>autocomplete</code> 角色。自動補全每打幾個字就會送一次請求，會大量佔用叢集，拖慢所有人的速度，而且 120b 這種大模型做自動補全也太慢。</div>
   <div class="note"><b>Continue 的介面會隨版本更新。</b> 如果找不到上面提到的按鈕，原則都一樣：找到 Continue 的 <code>config.yaml</code>，把 <code>models</code> 設定成上面那樣即可。</div>
 
   <h3>好用的問法</h3>

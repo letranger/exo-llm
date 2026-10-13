@@ -49,11 +49,12 @@ def ask(question, data):
         "每一項最後附上公告連結。"
     )
     response = client.chat.completions.create(
-        model="qwen3.5-122b",
+        model="gpt-oss-120b",
         messages=[
             {"role": "system", "content": system},
             {"role": "user", "content": f"公告：\n{data}\n\n問題：{question}"},
         ],
+        reasoning_effort="low",
     )
     return response.choices[0].message.content
 

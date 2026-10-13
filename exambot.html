@@ -32,7 +32,7 @@
   <ol class="steps">
     <li><b>抓列表</b>用 <code>requests</code> 下載官網「考試資訊」頁，用 <code>BeautifulSoup</code> 找出每則公告的標題、日期、連結。</li>
     <li><b>抓內文</b>再進入前 8 則公告的內頁，抓出內文（例如「第二次模擬考考試日期為10月28日～29日」）。</li>
-    <li><b>交給 AI</b>把公告、<b>今天的日期</b>和問題一起送給 Qwen3.5-122B，要求它只根據公告回答。</li>
+    <li><b>交給 AI</b>把公告、<b>今天的日期</b>和問題一起送給 gpt-oss-120b，要求它只根據公告回答。</li>
     <li><b>顯示</b>用 Streamlit 做成網頁：一個輸入框、一個按鈕，再把 AI 的回答顯示出來。</li>
   </ol>
   <div class="tip"><b>為什麼要給它今天的日期？</b> AI 不知道今天是幾號。不告訴它，它就分不出哪些考試「已經考完」、哪些是「最近」。</div>
@@ -114,11 +114,12 @@ client = OpenAI(
         <span class="s">"每一項最後附上公告連結。"</span>
     )
     response = client.chat.completions.create(
-        model=<span class="s">"qwen3.5-122b"</span>,
+        model=<span class="s">"gpt-oss-120b"</span>,
         messages=[
             {<span class="s">"role"</span>: <span class="s">"system"</span>, <span class="s">"content"</span>: system},
             {<span class="s">"role"</span>: <span class="s">"user"</span>, <span class="s">"content"</span>: <span class="s">f"公告：\n{data}\n\n問題：{question}"</span>},
         ],
+        reasoning_effort=<span class="s">"low"</span>,
     )
     <span class="k">return</span> response.choices[0].message.content
 
@@ -140,7 +141,7 @@ question = st.text_input(<span class="s">"想問什麼？"</span>, <span class="
     <li><code>@st.cache_data(ttl=600)</code>：10 分鐘內再問，就直接用上次抓到的資料，不會一直打學校網站。寫爬蟲要對別人的網站有禮貌。</li>
     <li><code>select("ul.list li")</code>：在瀏覽器對公告列表按右鍵 →「檢查」，就看得到每則公告是一個 <code>&lt;li&gt;</code>。寫爬蟲的第一步永遠是先看網頁原始碼長什麼樣子。</li>
     <li><code>st.expander</code>：把交給 AI 的原始資料也秀出來。回答怪怪的時候，先看資料有沒有抓對。</li>
-    <li>用 <code>qwen3.5-122b</code>（不思考模式），幾秒就能整理完；這種整理資料的工作不需要思考模式（見 <a href="start.html">快速開始</a>）。</li>
+    <li>不設 <code>max_tokens</code>，用 <code>reasoning_effort="low"</code> 讓它回答快一點（原因見 <a href="start.html">快速開始</a>）。</li>
   </ul>
 
   <h2>步驟 4：執行</h2>

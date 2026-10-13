@@ -61,7 +61,7 @@ client = OpenAI(
     api_key=getpass(<span class="s">"請輸入 API key："</span>),
 )</code></pre>
   <pre><code>response = client.chat.completions.create(
-    model=<span class="s">"qwen3.5-122b"</span>,
+    model=<span class="s">"gpt-oss-120b"</span>,
     messages=[{<span class="s">"role"</span>: <span class="s">"user"</span>, <span class="s">"content"</span>: <span class="s">"用一句話介紹 Jupyter"</span>}],
 )
 print(response.choices[0].message.content)</code></pre>

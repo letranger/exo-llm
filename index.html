@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>TNFSH EXO-LLM</title>
-<meta name="description" content="臺南一中校內 AI 叢集：三台 Mac mini 用 Thunderbolt 串成一顆 1220 億參數的大型語言模型，給 Python 與 AI 專題使用。">
+<meta name="description" content="臺南一中校內 AI 叢集：三台 Mac mini 用 Thunderbolt 串成一顆 1200 億參數的大型語言模型，給 Python 與 AI 專題使用。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
@@ -24,8 +24,8 @@
 
 <main class="wrap wide">
   <div class="eyebrow">TNFSH · Distributed LLM Cluster</div>
-  <h1>三台 Mac mini，<br>串成一顆 1220 億參數的大腦</h1>
-  <p class="lead">這是資訊科在教室裡架設的校內 AI 叢集。它跑的是阿里巴巴通義千問團隊開源的 <b>Qwen3.5-122B 模型</b>，以三台 Mac mini 組成 EXO 叢集執行。除了文字，它也<b>看得懂圖片</b>（照片、截圖、圖表），但不能處理語音。你可以在 Python 程式裡呼叫它，也可以用它做 AI 專題。</p>
+  <h1>三台 Mac mini，<br>串成一顆 1200 億參數的大腦</h1>
+  <p class="lead">這是資訊科在教室裡架設的校內 AI 叢集。它跑的是 OpenAI 開源的 <b>gpt-oss-120b模型</b>，以三台Mac Mini組成Exo Cluster執行，不過目前只支援文字生成，無法處理圖片或語音。你可以在 Python 程式裡呼叫它，也可以用它做 AI 專題。</p>
   <p>
     <a class="btn" href="start.html">5 分鐘寫出第一支程式 →</a>
     <a class="btn ghost" href="vibe.html">看看能做什麼專題</a>
@@ -38,7 +38,7 @@
 
   <h2>什麼是 EXO？</h2>
   <p><b>EXO</b> 是一套開源的「分散式推論」軟體：它把一個大型語言模型（LLM）切成好幾段，分給好幾台電腦一起算。就像一本太厚、一個人搬不動的書，拆成三冊由三個人一起搬。</p>
-  <p>大型語言模型的參數必須全部放進記憶體才能運作。Qwen3.5-122B 有 1220 億個參數，壓縮成 6 bit 後約 93 GB；我們每台 Mac mini 只有 48～64 GB 記憶體，單台放不下。EXO 把模型的 48 層切成三段，每台負責一段，再用 Thunderbolt 線把運算結果接力傳下去。</p>
+  <p>大型語言模型的參數必須全部放進記憶體才能運作。gpt-oss-120b 有 1200 億個參數，壓縮後約 63 GB；我們每台 Mac mini 只有 48～64 GB 記憶體，單台放不下。EXO 把模型的 36 層切成三段，每台負責一段，再用 Thunderbolt 線把運算結果接力傳下去。</p>
 
   <div class="diagram" role="img" aria-label="架構圖：學生透過 LiteLLM 閘道連到三台以 Thunderbolt RDMA 互連的 Mac mini">
     <svg viewBox="0 0 960 430" xmlns="http://www.w3.org/2000/svg" font-family="Noto Sans TC, PingFang TC, sans-serif">
@@ -70,17 +70,17 @@
         <rect x="560" y="40" width="130" height="92" rx="12" fill="#141416" stroke="#3a3a40"/>
         <text x="625" y="70" text-anchor="middle" fill="#ededed" font-size="16" font-weight="700">Exo-03</text>
         <text x="625" y="93" text-anchor="middle" fill="#9a9aa2">48 GB</text>
-        <text x="625" y="115" text-anchor="middle" fill="#ffc300" font-family="JetBrains Mono, monospace">層 21–34</text>
+        <text x="625" y="115" text-anchor="middle" fill="#ffc300" font-family="JetBrains Mono, monospace">層 0–10</text>
 
         <rect x="830" y="40" width="130" height="92" rx="12" fill="#141416" stroke="#3a3a40"/>
         <text x="895" y="70" text-anchor="middle" fill="#ededed" font-size="16" font-weight="700">Exo-02</text>
         <text x="895" y="93" text-anchor="middle" fill="#9a9aa2">48 GB</text>
-        <text x="895" y="115" text-anchor="middle" fill="#ffc300" font-family="JetBrains Mono, monospace">層 34–48</text>
+        <text x="895" y="115" text-anchor="middle" fill="#ffc300" font-family="JetBrains Mono, monospace">層 10–20</text>
 
         <rect x="695" y="300" width="130" height="92" rx="12" fill="#141416" stroke="#3a3a40"/>
         <text x="760" y="330" text-anchor="middle" fill="#ededed" font-size="16" font-weight="700">Exo-01</text>
         <text x="760" y="353" text-anchor="middle" fill="#9a9aa2">64 GB</text>
-        <text x="760" y="375" text-anchor="middle" fill="#ffc300" font-family="JetBrains Mono, monospace">層 0–21</text>
+        <text x="760" y="375" text-anchor="middle" fill="#ffc300" font-family="JetBrains Mono, monospace">層 20–36</text>
       </g>
       <text x="760" y="420" text-anchor="middle" fill="#9a9aa2" font-size="13">三台 Apple M4 Pro Mac mini · 共 160 GB 記憶體</text>
     </svg>
@@ -91,20 +91,20 @@
     <div class="card"><div class="k">01 · 免費</div><h3>不用付 API 費用</h3><p>雲端 AI 依用量計費，程式寫錯跑成迴圈，一晚就可能燒掉幾千元。在這裡練習，一毛都不用花。</p></div>
     <div class="card"><div class="k">02 · 隱私</div><h3>資料不離開學校</h3><p>你送出的問題、上傳的資料只在校內三台電腦間處理，不會傳到任何雲端公司。</p></div>
     <div class="card"><div class="k">03 · 業界標準</div><h3>OpenAI 相容 API</h3><p>用的是和 ChatGPT API 一模一樣的寫法。在這裡學會，將來換成任何雲端服務都只要改一行網址。</p></div>
-    <div class="card"><div class="k">04 · 夠大</div><h3>1220 億參數</h3><p>Qwen3.5-122B 寫程式、做摘要、讀圖片都明顯比一般小模型強；遇到難題還可以切換成「先思考再回答」模式。</p></div>
+    <div class="card"><div class="k">04 · 夠大</div><h3>1200 億參數</h3><p>gpt-oss-120b 會「先思考再回答」，寫程式、解數學、做推理都明顯比一般小模型強。</p></div>
     <div class="card"><div class="k">05 · 看得見</div><h3>AI 不再是黑盒子</h3><p>模型就在你眼前的三台機器上跑。分層、記憶體、網路、耗電都能實際觀察，甚至拿來當科展題目。</p></div>
     <div class="card"><div class="k">06 · 可擴充</div><h3>加一台就更強</h3><p>再加一台 Mac，叢集就能跑更大的模型。這正是現在 AI 資料中心的運作方式，只是縮小成教室版。</p></div>
   </div>
 
   <h2>實測數據</h2>
-  <p class="muted">2026 年 10 月 13 日實測 Qwen3.5-122B（不思考模式），條件：輸入約 1,200 字元、輸出 256 tokens。</p>
+  <p class="muted">2026 年 10 月實測，條件：輸入約 1,200 字元、輸出 256 tokens。</p>
   <div class="stats">
-    <div class="stat"><div class="v">15<small>tok/s</small></div><div class="d">單人使用時的生成速度，約和人閱讀一樣快</div></div>
-    <div class="stat"><div class="v">~6<small>秒</small></div><div class="d">送出問題到開始回答的等待時間</div></div>
+    <div class="stat"><div class="v">30<small>tok/s</small></div><div class="d">單人使用時的生成速度，比人閱讀還快</div></div>
+    <div class="stat"><div class="v">314<small>tok/s</small></div><div class="d">讀取你的問題（prompt）的速度</div></div>
     <div class="stat"><div class="v">~6<small>組</small></div><div class="d">同時服務的請求數，超過會排隊</div></div>
-    <div class="stat"><div class="v">29<small>tok/s</small></div><div class="d">多人同時使用時，叢集的總產量</div></div>
+    <div class="stat"><div class="v">116<small>W</small></div><div class="d">三台合計耗電，約一台筆電充電器的兩倍</div></div>
   </div>
-  <div class="note"><b>為什麼 1220 億參數還跑得動？</b> Qwen3.5-122B 是「混合專家」（MoE）架構：1220 億參數裡，每產生一個字只會用到約 100 億個（名字裡的 A10B）。我們用同一套設備測過 700 億參數的 Llama 3.3，單機每秒只有 5.8 tokens，Qwen3.5-122B 快了約 2.6 倍。</div>
+  <div class="note"><b>為什麼大模型反而快？</b> gpt-oss-120b 是「混合專家」（MoE）架構：1200 億參數裡，每產生一個字只會用到約 50 億個。我們用同一套設備測過 700 億參數的 Llama 3.3，單機每秒只有 5.8 tokens，gpt-oss-120b 快了 5 倍。</div>
 
   <h2>它可以怎麼幫你的專題？</h2>
   <div class="grid">
@@ -123,7 +123,7 @@
   </ol>
 </main>
 
-<footer><div class="wrap wide">國立臺南第一高級中學 資訊科 · 叢集軟體 <a href="https://github.com/exo-explore/exo">EXO</a> · 模型 <a href="https://huggingface.co/Qwen/Qwen3.5-122B-A10B">Qwen3.5-122B-A10B</a>（Apache 2.0）· <a href="slides.html">輪播投影片</a></div></footer>
+<footer><div class="wrap wide">國立臺南第一高級中學 資訊科 · 叢集軟體 <a href="https://github.com/exo-explore/exo">EXO</a> · 模型 <a href="https://huggingface.co/openai/gpt-oss-120b">OpenAI gpt-oss-120b</a>（Apache 2.0）· <a href="slides.html">輪播投影片</a></div></footer>
 <script src="assets/site.js"></script>
 </body>
 </html>
