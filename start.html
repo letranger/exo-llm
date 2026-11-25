@@ -30,9 +30,17 @@
   <div class="tbl"><table>
     <tr><th>項目</th><th>內容</th></tr>
     <tr><td>網址（base_url）</td><td><code>http://192.168.16.233:4000/v1</code>（只有校內網路連得到）</td></tr>
-    <tr><td>模型名稱（model）</td><td><code>gpt-oss-120b</code></td></tr>
+    <tr><td>模型名稱（model）</td><td><code>gpt-oss-120b</code>（品質好）或 <code>gpt-oss-20b</code>（速度快），見下表</td></tr>
     <tr><td>API key</td><td>向資訊老師申請，長得像 <code>sk-exo-</code> 開頭的一串亂碼</td></tr>
   </table></div>
+
+  <h3>要用哪個模型？</h3>
+  <div class="tbl"><table>
+    <tr><th>模型</th><th>什麼時候用</th></tr>
+    <tr><td><code>gpt-oss-120b</code></td><td>專題、難的程式或數學題、需要答得準的應用。下面的範例都用它</td></tr>
+    <tr><td><code>gpt-oss-20b</code></td><td>上課全班同時練習、聊天、簡單問答，或程式要呼叫很多次的時候。比較快，但比較容易答錯</td></tr>
+  </table></div>
+  <p class="muted">兩個模型跑在不同的電腦上，用法一模一樣，只要改 <code>model</code>。先用 20b 把程式寫通，再換 120b 提升品質，是很好的習慣。</p>
 
   <h2>步驟 1：安裝 openai 套件</h2>
   <p>在終端機（Windows 是「命令提示字元」或 PowerShell）輸入：</p>
@@ -108,7 +116,7 @@ messages = [{<span class="s">"role"</span>: <span class="s">"system"</span>, <sp
     messages.append({<span class="s">"role"</span>: <span class="s">"assistant"</span>, <span class="s">"content"</span>: answer})</code></pre>
 
   <h2>gpt-oss 的特色：先思考，再回答</h2>
-  <p>gpt-oss-120b 是「推理模型」：回答前會先在內部想一遍。這讓它答得更準，但有兩件事要知道：</p>
+  <p>gpt-oss-120b 和 gpt-oss-20b 都是「推理模型」：回答前會先在內部想一遍。這讓它們答得更準，但有兩件事要知道：</p>
 
   <h3>1. max_tokens 不要設太小</h3>
   <p><code>max_tokens</code> 限制的是「思考＋回答」的總長度。我們實測設成 40 時，40 個 token 全被拿去思考，<b>回答變成空白</b>。</p>
@@ -152,7 +160,7 @@ print(quiz[<span class="s">"q"</span>])
   <div class="tbl"><table>
     <tr><th>錯誤</th><th>意思</th><th>怎麼辦</th></tr>
     <tr><td><code>401</code> AuthenticationError</td><td>key 錯了或被停用</td><td>檢查 key 有沒有多複製到空白；仍不行請問老師</td></tr>
-    <tr><td><code>400</code> 沒有這個模型</td><td>model 名稱打錯</td><td>改成 <code>gpt-oss-120b</code></td></tr>
+    <tr><td><code>400</code> 沒有這個模型</td><td>model 名稱打錯</td><td>改成 <code>gpt-oss-120b</code> 或 <code>gpt-oss-20b</code></td></tr>
     <tr><td><code>502</code></td><td>叢集沒有回應</td><td>可能正在重開機，稍後再試或通知老師</td></tr>
     <tr><td>APIConnectionError / 逾時</td><td>連不到伺服器</td><td>確認你在校內網路；在 Google Colab 上一定連不到，見 <a href="colab.html">說明</a></td></tr>
     <tr><td>回答是空白</td><td>思考把 max_tokens 用完了</td><td>把 <code>max_tokens</code> 調大，或拿掉</td></tr>

@@ -36,7 +36,7 @@
   <h2>使用限制</h2>
   <div class="tbl"><table>
     <tr><th>項目</th><th>限制</th><th>原因</th></tr>
-    <tr><td>請求次數</td><td>校內使用不限次數</td><td>叢集同時約可服務 6 個請求，超過會排隊，請互相禮讓</td></tr>
+    <tr><td>請求次數</td><td>校內使用不限次數</td><td>每個模型同時約可服務 5–6 個請求，超過會排隊，請互相禮讓</td></tr>
     <tr><td>單次回答長度</td><td>最多 4096 tokens（含思考）</td><td>避免單一請求佔用太久</td></tr>
     <tr><td>連線範圍</td><td>校內網路</td><td>叢集在校內；Google Colab 連不到，見 <a href="colab.html">Colab 與 Jupyter</a></td></tr>
   </table></div>
@@ -50,7 +50,7 @@
   <p>閘道只記錄「哪一把 key、什麼時間、用了多少 tokens、成功或失敗」，用來管理用量與排除問題，<b>不記錄你送出的問題和 AI 的回答內容</b>。不過仍請不要送出個人敏感資料（身分證字號、密碼等），這是使用任何 AI 服務都該有的習慣。</p>
 
   <h3>為什麼有時候很慢？</h3>
-  <p>叢集同時約可處理 6 個請求，超過就要排隊。我們實測 30 人同時發問時，最久要等約 2 分鐘才開始回答。另外，問題越難、<code>reasoning_effort</code> 越高，AI 思考越久。</p>
+  <p>每個模型同時約可處理 5–6 個請求，超過就要排隊。我們實測 10 人同時用同一個模型時，最晚的人要等將近 1 分鐘才開始回答。全班一起練習時，建議改用 <code>gpt-oss-20b</code>，把 120b 留給需要品質的同學，兩邊都不用排太久。另外，問題越難、<code>reasoning_effort</code> 越高，AI 思考越久。</p>
 
   <h3>回答是空白的？</h3>
   <p>通常是 <code>max_tokens</code> 設太小，額度全被「思考」用完了。拿掉 <code>max_tokens</code> 或設 500 以上。詳見<a href="start.html">快速開始</a>。</p>
@@ -59,10 +59,10 @@
   <p>在 system prompt 寫明「用繁體中文回答」。它的思考過程（<code>reasoning_content</code>）通常是英文，這是正常的。</p>
 
   <h3>它和 ChatGPT 一樣嗎？</h3>
-  <p>gpt-oss-120b 是 OpenAI 公開釋出的開源模型，和 ChatGPT 是同一家公司做的，但不是同一個模型。它的知識有截止日期，也不會上網查資料；需要最新資訊時，請自己把資料放進提示詞（見 <a href="vibe.html#rag">RAG</a>）。</p>
+  <p>gpt-oss-120b 和 gpt-oss-20b 是 OpenAI 公開釋出的開源模型，和 ChatGPT 是同一家公司做的，但不是同一個模型。它的知識有截止日期，也不會上網查資料；需要最新資訊時，請自己把資料放進提示詞（見 <a href="vibe.html#rag">RAG</a>）。</p>
 
   <h3>可以用在其他語言或工具嗎？</h3>
-  <p>可以。任何支援「OpenAI 相容 API」的工具都能用，只要把網址設成 <code>http://192.168.16.233:4000/v1</code>、模型設成 <code>gpt-oss-120b</code>。JavaScript 可以用 <code>openai</code> npm 套件，用法幾乎一樣。</p>
+  <p>可以。任何支援「OpenAI 相容 API」的工具都能用，只要把網址設成 <code>http://192.168.16.233:4000/v1</code>、模型設成 <code>gpt-oss-120b</code> 或 <code>gpt-oss-20b</code>。JavaScript 可以用 <code>openai</code> npm 套件，用法幾乎一樣。</p>
 
   <h3>叢集好像掛了？</h3>
   <p>在瀏覽器打開 <code>http://192.168.16.131:8080/health</code>：</p>

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>TNFSH EXO-LLM</title>
-<meta name="description" content="臺南一中校內 AI 叢集：三台 Mac mini 用 Thunderbolt 串成一顆 1200 億參數的大型語言模型，給 Python 與 AI 專題使用。">
+<meta name="description" content="臺南一中校內 AI 叢集：三台 Mac mini 用 Thunderbolt 串起來，同時提供 1200 億參數的 gpt-oss-120b 與快速的 gpt-oss-20b，給 Python 與 AI 專題使用。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
@@ -24,8 +24,8 @@
 
 <main class="wrap wide">
   <div class="eyebrow">TNFSH · Distributed LLM Cluster</div>
-  <h1>三台 Mac mini，<br>串成一顆 1200 億參數的大腦</h1>
-  <p class="lead">這是資訊科在教室裡架設的校內 AI 叢集。它跑的是 OpenAI 開源的 <b>gpt-oss-120b模型</b>，以三台Mac Mini組成Exo Cluster執行，不過目前只支援文字生成，無法處理圖片或語音。你可以在 Python 程式裡呼叫它，也可以用它做 AI 專題。</p>
+  <h1>三台 Mac mini，<br>跑起兩顆 AI 大腦</h1>
+  <p class="lead">這是資訊科在教室裡架設的校內 AI 叢集，用三台 Mac mini 組成 EXO 叢集，同時提供兩個 OpenAI 開源模型：品質最好的 <b>gpt-oss-120b</b>（1200 億參數，兩台一起跑），和速度最快的 <b>gpt-oss-20b</b>（200 億參數，一台就夠）。目前只支援文字生成，無法處理圖片或語音。你可以在 Python 程式裡呼叫它們，也可以用來做 AI 專題。</p>
   <p>
     <a class="btn" href="start.html">5 分鐘寫出第一支程式 →</a>
     <a class="btn ghost" href="vibe.html">看看能做什麼專題</a>
@@ -37,10 +37,10 @@
   </figure>
 
   <h2>什麼是 EXO？</h2>
-  <p><b>EXO</b> 是一套開源的「分散式推論」軟體：它把一個大型語言模型（LLM）切成好幾段，分給好幾台電腦一起算。就像一本太厚、一個人搬不動的書，拆成三冊由三個人一起搬。</p>
-  <p>大型語言模型的參數必須全部放進記憶體才能運作。gpt-oss-120b 有 1200 億個參數，壓縮後約 63 GB；我們每台 Mac mini 只有 48～64 GB 記憶體，單台放不下。EXO 把模型的 36 層切成三段，每台負責一段，再用 Thunderbolt 線把運算結果接力傳下去。</p>
+  <p><b>EXO</b> 是一套開源的「分散式推論」軟體：它把一個大型語言模型（LLM）拆開，分給好幾台電腦一起算。就像一張太大、一個人搬不動的桌子，兩個人各抬一邊。</p>
+  <p>大型語言模型的參數必須全部放進記憶體才能運作。gpt-oss-120b 有 1200 億個參數，壓縮後約 63 GB；我們每台 Mac mini 只有 48～64 GB 記憶體，單台放不下。EXO 用 <b>Tensor 平行</b>的方式，把模型 36 層的<b>每一層都對半切開</b>，Exo-02 和 Exo-03 各算一半、同時進行，每算完一層就透過 Thunderbolt 線交換結果。gpt-oss-20b 壓縮後只有 11 GB，由 Exo-01 單獨執行。</p>
 
-  <div class="diagram" role="img" aria-label="架構圖：學生透過 LiteLLM 閘道連到三台以 Thunderbolt RDMA 互連的 Mac mini">
+  <div class="diagram" role="img" aria-label="架構圖：學生透過 LiteLLM 閘道連到 EXO 叢集；Exo-02 與 Exo-03 以 Thunderbolt RDMA 合跑 gpt-oss-120b，Exo-01 單獨跑 gpt-oss-20b">
     <svg viewBox="0 0 960 430" xmlns="http://www.w3.org/2000/svg" font-family="Noto Sans TC, PingFang TC, sans-serif">
       <defs>
         <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#9a9aa2"/></marker>
@@ -70,19 +70,19 @@
         <rect x="560" y="40" width="130" height="92" rx="12" fill="#141416" stroke="#3a3a40"/>
         <text x="625" y="70" text-anchor="middle" fill="#ededed" font-size="16" font-weight="700">Exo-03</text>
         <text x="625" y="93" text-anchor="middle" fill="#9a9aa2">48 GB</text>
-        <text x="625" y="115" text-anchor="middle" fill="#ffc300" font-family="JetBrains Mono, monospace">層 0–10</text>
+        <text x="625" y="115" text-anchor="middle" fill="#ffc300" font-family="JetBrains Mono, monospace">120b 每層一半</text>
 
         <rect x="830" y="40" width="130" height="92" rx="12" fill="#141416" stroke="#3a3a40"/>
         <text x="895" y="70" text-anchor="middle" fill="#ededed" font-size="16" font-weight="700">Exo-02</text>
         <text x="895" y="93" text-anchor="middle" fill="#9a9aa2">48 GB</text>
-        <text x="895" y="115" text-anchor="middle" fill="#ffc300" font-family="JetBrains Mono, monospace">層 10–20</text>
+        <text x="895" y="115" text-anchor="middle" fill="#ffc300" font-family="JetBrains Mono, monospace">120b 每層一半</text>
 
         <rect x="695" y="300" width="130" height="92" rx="12" fill="#141416" stroke="#3a3a40"/>
         <text x="760" y="330" text-anchor="middle" fill="#ededed" font-size="16" font-weight="700">Exo-01</text>
         <text x="760" y="353" text-anchor="middle" fill="#9a9aa2">64 GB</text>
-        <text x="760" y="375" text-anchor="middle" fill="#ffc300" font-family="JetBrains Mono, monospace">層 20–36</text>
+        <text x="760" y="375" text-anchor="middle" fill="#ffc300" font-family="JetBrains Mono, monospace">gpt-oss-20b</text>
       </g>
-      <text x="760" y="420" text-anchor="middle" fill="#9a9aa2" font-size="13">三台 Apple M4 Pro Mac mini · 共 160 GB 記憶體</text>
+      <text x="760" y="420" text-anchor="middle" fill="#9a9aa2" font-size="13">三台 Apple M4 Pro Mac mini · 共 160 GB 記憶體 · 上面兩台合跑 120b、下面一台跑 20b</text>
     </svg>
   </div>
 
@@ -96,15 +96,24 @@
     <div class="card"><div class="k">06 · 可擴充</div><h3>加一台就更強</h3><p>再加一台 Mac，叢集就能跑更大的模型。這正是現在 AI 資料中心的運作方式，只是縮小成教室版。</p></div>
   </div>
 
+  <h2>兩個模型怎麼選？</h2>
+  <div class="tbl"><table>
+    <tr><th>模型名稱（model）</th><th>特色</th><th>適合</th></tr>
+    <tr><td><code>gpt-oss-120b</code></td><td>1200 億參數，品質最好</td><td>專題、難的程式或數學、需要準確度的應用</td></tr>
+    <tr><td><code>gpt-oss-20b</code></td><td>200 億參數，速度最快，但比較容易出錯</td><td>上課全班同時練習、聊天、簡單問答、大量重複呼叫</td></tr>
+  </table></div>
+  <p class="muted">兩個模型用法完全一樣，只要改 <code>model</code> 這一行。兩個模型跑在不同的電腦上，彼此不會搶資源。</p>
+
   <h2>實測數據</h2>
-  <p class="muted">2026 年 10 月實測，條件：輸入約 1,200 字元、輸出 256 tokens。</p>
+  <p class="muted">2026 年 11 月實測，條件：串流輸出 800 tokens。</p>
   <div class="stats">
-    <div class="stat"><div class="v">30<small>tok/s</small></div><div class="d">單人使用時的生成速度，比人閱讀還快</div></div>
-    <div class="stat"><div class="v">314<small>tok/s</small></div><div class="d">讀取你的問題（prompt）的速度</div></div>
-    <div class="stat"><div class="v">~6<small>組</small></div><div class="d">同時服務的請求數，超過會排隊</div></div>
-    <div class="stat"><div class="v">116<small>W</small></div><div class="d">三台合計耗電，約一台筆電充電器的兩倍</div></div>
+    <div class="stat"><div class="v">68<small>tok/s</small></div><div class="d">gpt-oss-120b 單人使用時的生成速度，比人閱讀快很多</div></div>
+    <div class="stat"><div class="v">74<small>tok/s</small></div><div class="d">gpt-oss-20b 單人使用時的生成速度</div></div>
+    <div class="stat"><div class="v">~110<small>tok/s</small></div><div class="d">每個模型同時服務多人時的總產量，約 5 人以上會開始排隊</div></div>
+    <div class="stat"><div class="v">~500<small>tok/s</small></div><div class="d">讀取你的問題（prompt）的速度</div></div>
   </div>
-  <div class="note"><b>為什麼大模型反而快？</b> gpt-oss-120b 是「混合專家」（MoE）架構：1200 億參數裡，每產生一個字只會用到約 50 億個。我們用同一套設備測過 700 億參數的 Llama 3.3，單機每秒只有 5.8 tokens，gpt-oss-120b 快了 5 倍。</div>
+  <div class="note"><b>為什麼大模型反而快？</b> gpt-oss-120b 是「混合專家」（MoE）架構：1200 億參數裡，每產生一個字只會用到約 50 億個。我們用同一套設備測過 700 億參數的 Llama 3.3，單機每秒只有 5.8 tokens，gpt-oss-120b 快了 10 倍以上。</div>
+  <div class="note"><b>為什麼兩台比三台快？</b> 以前我們用三台「接力」跑 120b（Pipeline：每台負責幾層，算完傳給下一台），一次只有一台在算，單人只有每秒約 30 tokens。現在改用兩台「每層對半切、同時算」（Tensor），兩台一起出力，速度變成兩倍多，空出來的那台再跑 20b。</div>
 
   <h2>它可以怎麼幫你的專題？</h2>
   <div class="grid">
@@ -123,7 +132,7 @@
   </ol>
 </main>
 
-<footer><div class="wrap wide">國立臺南第一高級中學 資訊科 · 叢集軟體 <a href="https://github.com/exo-explore/exo">EXO</a> · 模型 <a href="https://huggingface.co/openai/gpt-oss-120b">OpenAI gpt-oss-120b</a>（Apache 2.0）· <a href="slides.html">輪播投影片</a></div></footer>
+<footer><div class="wrap wide">國立臺南第一高級中學 資訊科 · 叢集軟體 <a href="https://github.com/exo-explore/exo">EXO</a> · 模型 <a href="https://huggingface.co/openai/gpt-oss-120b">OpenAI gpt-oss-120b</a>、<a href="https://huggingface.co/openai/gpt-oss-20b">gpt-oss-20b</a>（Apache 2.0）· <a href="slides.html">輪播投影片</a></div></footer>
 <script src="assets/site.js"></script>
 </body>
 </html>

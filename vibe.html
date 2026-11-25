@@ -119,7 +119,8 @@ print(call.function.name, call.function.arguments)   <span class="c"># get_weath
   <h2 id="research">把叢集本身當研究題目</h2>
   <p>很少高中有機會直接觀察大型語言模型怎麼在多台電腦上運作。可以發展成科展或小論文的方向：</p>
   <ul>
-    <li><b>分散方式的比較：</b>Pipeline（分層接力）和 Tensor（每層拆開同時算）在速度上差多少？我們實測 2 台 Tensor 比單機快 1.85 倍，3 台 Pipeline 則和單機差不多。為什麼？</li>
+    <li><b>分散方式的比較：</b>Pipeline（分層接力）和 Tensor（每層拆開同時算）在速度上差多少？我們實測 gpt-oss-120b 用 3 台 Pipeline 每秒約 30 tokens，改成 2 台 Tensor 變成約 68 tokens，台數變少反而快兩倍多。為什麼？</li>
+    <li><b>大模型和小模型的取捨：</b>gpt-oss-120b 和 gpt-oss-20b 速度差不多，品質差多少？設計一套題目（程式、數學、中文寫作）比較正確率，看看什麼任務用 20b 就夠了。</li>
     <li><b>量化對品質的影響：</b>同一個模型的 4bit、8bit 版本，答題正確率和速度差多少？</li>
     <li><b>能源效率：</b>每產生一個 token 要消耗多少焦耳？和雲端服務比較如何？</li>
     <li><b>多人使用：</b>同時 1、5、10、30 人使用時，等待時間怎麼變化？可以設計更公平的排隊方式嗎？</li>

@@ -64,10 +64,19 @@ models:
     roles:
       - chat
       - edit
+      - apply
+  - name: gpt-oss-20b（校內・快速）
+    provider: openai
+    model: gpt-oss-20b
+    apiBase: http://192.168.16.233:4000/v1
+    apiKey: 你的API key
+    roles:
+      - chat
+      - edit
       - apply</code></pre>
 
   <ol class="steps" start="4" style="counter-reset: s 3">
-    <li><b>選擇模型</b>回到 Continue 聊天面板，在模型下拉選單選「gpt-oss-120b（校內）」。</li>
+    <li><b>選擇模型</b>回到 Continue 聊天面板，在模型下拉選單選「gpt-oss-120b（校內）」。想要回得快一點（例如只是問語法、解釋錯誤訊息），可以切換成「gpt-oss-20b（校內・快速）」。</li>
     <li><b>試試看</b>在程式裡選取一段程式碼，按 <code>Cmd/Ctrl + J</code> 把它加進聊天，問「這段程式在做什麼？」。</li>
   </ol>
 

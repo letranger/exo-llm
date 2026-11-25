@@ -83,8 +83,8 @@ svg text{font-family:var(--sans)}
     <div class="hero">
       <div>
         <div class="eye">TNFSH · 校內 AI 叢集</div>
-        <h1>三台 Mac mini，<br>串成一顆<br><span class="y">1200 億參數</span>的大腦</h1>
-        <p class="big">這就是你眼前的 <b>EXO-LLM</b>：一台放不下的大型語言模型，三台一起跑。Python 課程與 AI 專題，免費使用。</p>
+        <h1>三台 Mac mini，<br>跑起<span class="y">兩顆</span><br>AI 大腦</h1>
+        <p class="big">這就是你眼前的 <b>EXO-LLM</b>：1200 億參數的 <b>gpt-oss-120b</b> 由兩台合力跑，快速的 <b>gpt-oss-20b</b> 由一台跑。Python 課程與 AI 專題，免費使用。</p>
       </div>
       <div class="pic"><img src="assets/exo-cluster-slide.jpg" alt="三台疊在一起的 Mac mini"></div>
     </div>
@@ -93,8 +93,8 @@ svg text{font-family:var(--sans)}
   <section class="slide" data-sec="13">
     <div class="eye">What is EXO?</div>
     <h2>把一個太大的 AI，<span class="y">切開來</span>一起算</h2>
-    <p class="big"><b>EXO</b> 是開源的「分散式推論」軟體。它把大型語言模型的 36 層切成三段，每台 Mac mini 負責一段，算完就透過 Thunderbolt 線把結果<b>接力</b>傳給下一台。</p>
-    <p class="sub">就像一本一個人搬不動的厚書，拆成三冊、三個人一起搬。</p>
+    <p class="big"><b>EXO</b> 是開源的「分散式推論」軟體。它把 gpt-oss-120b 36 層的<b>每一層都對半切開</b>，兩台 Mac mini 各算一半、<b>同時</b>進行，每算完一層就透過 Thunderbolt 線交換結果。</p>
+    <p class="sub">就像一張一個人搬不動的大桌子，兩個人各抬一邊。</p>
   </section>
 
   <section class="slide" data-sec="14">
@@ -120,26 +120,27 @@ svg text{font-family:var(--sans)}
         <rect x="890" y="40" width="210" height="150" rx="20" fill="#141416" stroke="#3a3a40" stroke-width="2"/>
         <text x="995" y="92" text-anchor="middle" fill="#ededed" font-size="34" font-weight="700">Exo-03</text>
         <text x="995" y="132" text-anchor="middle" fill="#9a9aa2" font-size="26">48 GB</text>
-        <text x="995" y="170" text-anchor="middle" fill="#ffc300" font-size="26" font-family="JetBrains Mono, monospace">層 0–10</text>
+        <text x="995" y="170" text-anchor="middle" fill="#ffc300" font-size="26" font-family="JetBrains Mono, monospace">120b 每層一半</text>
         <rect x="1390" y="40" width="210" height="150" rx="20" fill="#141416" stroke="#3a3a40" stroke-width="2"/>
         <text x="1495" y="92" text-anchor="middle" fill="#ededed" font-size="34" font-weight="700">Exo-02</text>
         <text x="1495" y="132" text-anchor="middle" fill="#9a9aa2" font-size="26">48 GB</text>
-        <text x="1495" y="170" text-anchor="middle" fill="#ffc300" font-size="26" font-family="JetBrains Mono, monospace">層 10–20</text>
+        <text x="1495" y="170" text-anchor="middle" fill="#ffc300" font-size="26" font-family="JetBrains Mono, monospace">120b 每層一半</text>
         <rect x="1140" y="460" width="210" height="150" rx="20" fill="#141416" stroke="#3a3a40" stroke-width="2"/>
         <text x="1245" y="512" text-anchor="middle" fill="#ededed" font-size="34" font-weight="700">Exo-01</text>
         <text x="1245" y="552" text-anchor="middle" fill="#9a9aa2" font-size="26">64 GB</text>
-        <text x="1245" y="590" text-anchor="middle" fill="#ffc300" font-size="26" font-family="JetBrains Mono, monospace">層 20–36</text>
+        <text x="1245" y="590" text-anchor="middle" fill="#ffc300" font-size="26" font-family="JetBrains Mono, monospace">gpt-oss-20b</text>
       </g>
     </svg>
   </section>
 
   <section class="slide" data-sec="12">
     <div class="eye">Why a cluster?</div>
-    <h2>一台<span class="y">放不下</span>，三台<span class="y">跑得動</span></h2>
-    <div class="row c3">
+    <h2>一台<span class="y">放不下</span>，兩台<span class="y">跑得動</span></h2>
+    <div class="row c4">
       <div class="box stat"><div class="v">63<small>GB</small></div><div class="d">gpt-oss-120b<br>模型本身的大小</div></div>
-      <div class="box stat"><div class="v">48–64<small>GB</small></div><div class="d">每台 Mac mini 的記憶體<br>單獨一台裝不下</div></div>
-      <div class="box stat"><div class="v">160<small>GB</small></div><div class="d">三台合起來的記憶體<br>綽綽有餘</div></div>
+      <div class="box stat"><div class="v">48<small>GB</small></div><div class="d">Exo-02、Exo-03 各自的記憶體<br>單獨一台裝不下</div></div>
+      <div class="box stat"><div class="v">33<small>GB</small></div><div class="d">切成兩半後<br>每台分到的大小</div></div>
+      <div class="box stat"><div class="v">11<small>GB</small></div><div class="d">gpt-oss-20b<br>Exo-01 一台就裝得下</div></div>
     </div>
   </section>
 
@@ -147,10 +148,10 @@ svg text{font-family:var(--sans)}
     <div class="eye">Benchmarks</div>
     <h2>實測速度</h2>
     <div class="row c4">
-      <div class="box stat"><div class="v">30<small>tok/s</small></div><div class="d">生成回答的速度<br>比人閱讀還快</div></div>
-      <div class="box stat"><div class="v">314<small>tok/s</small></div><div class="d">讀進你的問題<br>的速度</div></div>
-      <div class="box stat"><div class="v">5×</div><div class="d">比 700 億參數的<br>Llama 3.3 單機還快</div></div>
-      <div class="box stat"><div class="v">116<small>W</small></div><div class="d">三台合計耗電</div></div>
+      <div class="box stat"><div class="v">68<small>tok/s</small></div><div class="d">gpt-oss-120b<br>生成回答的速度</div></div>
+      <div class="box stat"><div class="v">74<small>tok/s</small></div><div class="d">gpt-oss-20b<br>生成回答的速度</div></div>
+      <div class="box stat"><div class="v">~500<small>tok/s</small></div><div class="d">讀進你的問題<br>的速度</div></div>
+      <div class="box stat"><div class="v">2.3×</div><div class="d">兩台 Tensor<br>比三台接力還快</div></div>
     </div>
     <p class="sub">秘密在於「混合專家」（MoE）架構：1200 億參數中，每產生一個字只用到約 50 億。</p>
   </section>
